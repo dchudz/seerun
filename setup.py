@@ -15,13 +15,13 @@ setup(
                 " (deleted, replaced) with tests still passing (be careful!)",
     entry_points={
         'console_scripts': [
-            'rewritecov=rewritecov.cli:main',
+            'showvalues=showvalues.cli:main',
         ],
     },
-    install_requires=['Click>=6.0', ],
+    install_requires=['Click>=6.0', 'asttokens'],
     include_package_data=True,
-    keywords='rewritecov',
-    name='rewritecov',
-    packages=find_packages(include=['rewritecov']),
+    keywords='showvalues',
+    name='showvalues',
+    packages=find_packages(include=['showvalues']),
     version='0.1.0',
 )

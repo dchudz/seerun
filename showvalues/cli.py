@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 
-"""Console script for rewritecov."""
+"""Console script for showvalues."""
 import logging
 import sys
 import click
 
-from rewritecov import find_uncovered, DELETE, NONIFY
+from showvalues import find_uncovered, DELETE, NONIFY
 
 
 def format_uncovereds(uncovereds, description):
@@ -20,7 +20,7 @@ def format_uncovereds(uncovereds, description):
 @click.option('-v', '--verbose', is_flag=True, help='Enables verbose mode')
 @click.argument('path')
 def main(verbose, path):
-    """Console script for rewritecov."""
+    """Console script for showvalues."""
     if verbose:
         logging.basicConfig(level=logging.DEBUG)
 
