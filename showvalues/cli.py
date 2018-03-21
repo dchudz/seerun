@@ -24,7 +24,7 @@ def main(verbose, python_source, html_out):
     """Console script for showvalues."""
     if verbose:
         logging.basicConfig(level=logging.DEBUG)
-    write_html(python_source, python_source)
+    write_html(python_source, html_out)
 
 if __name__ == "__main__":
     sys.exit(main())  # pragma: no cover

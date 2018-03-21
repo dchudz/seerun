@@ -55,7 +55,7 @@ def write_html(source_path, html_path):
         source_code = source_file.read()
     html = get_html_for_source(source_code)
     with open(html_path, 'w') as html_file:
-        html_file.writable(html)
+        html_file.write(html)
 
 
 def id_string_from_start_end(start, end):
@@ -98,79 +98,79 @@ def get_html_for_source(code):
         html_lines.append(html.escape(s))
 
     return '''
-            <html>
-            <head>
-            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1
-            /jquery.min.js"></script>
-            <style>
-            * {
-                box-sizing: border-box;
-            }
-            
-            html, body {margin: 0; height: 100%%; overflow: hidden}
-            
-            /* Create two equal columns that floats next to each other */
-            .column1 {
-                float: left;
-                width: 60%%;
-                padding: 10px;
-                height: 7000px;
-                overflow: auto;
-                display:block;
-            
-            }
-            
-            .column2 {
-                float: left;
-                width: 40%%;
-                padding: 10px;
-                height: 300px; /* Should be removed. Only for demonstration */
-                overflow: scroll;
-            }
-            /* Clear floats after the columns */
-            .row:after {
-                content: "";
-                display: table;
-                clear: both;
-            }
-            </style>
-            </head>
-            <body>
-            
-            <div class="row">
-              <div class="column1">
-            <pre>
-            
-            %s
-            
-            
-            
-            </pre>
-            
-              </div>
-              <div class="column2" style="background-color:#bbb;">
-                <h2>Column 2</h2>
-                <p>Some text..</p>
-              </div>
-            </div>
-            
-            </body>
-            </html>
-            
-            
-            <script>
-                $(document).ready(function() {
-                    $('.text').mouseover(function() {
-                      parent = $(this).parent();
-                      parent.css("background-color", "yellow");
-                      $(".column2").text(parent[0].id)
-                    });
-                    $('.text').mouseout(function() {
-                      $(this).parent().css("background-color", "");
-                      $(".column2").text("hello!")
-                    });
-                });
-            </script>
-            
-            </html>
+<html>
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1
+/jquery.min.js"></script>
+<style>
+* {
+    box-sizing: border-box;
+}
+
+html, body {margin: 0; height: 100%%; overflow: hidden}
+
+/* Create two equal columns that floats next to each other */
+.column1 {
+    float: left;
+    width: 60%%;
+    padding: 10px;
+    height: 7000px;
+    overflow: auto;
+    display:block;
+
+}
+
+.column2 {
+    float: left;
+    width: 40%%;
+    padding: 10px;
+    height: 300px; /* Should be removed. Only for demonstration */
+    overflow: scroll;
+}
+/* Clear floats after the columns */
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+</style>
+</head>
+<body>
+
+<div class="row">
+  <div class="column1">
+<pre>
+
+%s
+
+
+
+</pre>
+
+  </div>
+  <div class="column2" style="background-color:#bbb;">
+    <h2>Column 2</h2>
+    <p>Some text..</p>
+  </div>
+</div>
+
+</body>
+</html>
+
+
+<script>
+    $(document).ready(function() {
+        $('.text').mouseover(function() {
+          parent = $(this).parent();
+          parent.css("background-color", "yellow");
+          $(".column2").text(parent[0].id)
+        });
+        $('.text').mouseout(function() {
+          $(this).parent().css("background-color", "");
+          $(".column2").text("hello!")
+        });
+    });
+</script>
+
+</html>
             ''' % ''.join(html_lines)
