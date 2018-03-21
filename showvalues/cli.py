@@ -5,7 +5,7 @@ import logging
 import sys
 import click
 
-from showvalues import find_uncovered, DELETE, NONIFY
+from showvalues.html import write_html
 
 
 def format_uncovereds(uncovereds, description):
@@ -18,29 +18,13 @@ def format_uncovereds(uncovereds, description):
 
 @click.command()
 @click.option('-v', '--verbose', is_flag=True, help='Enables verbose mode')
-@click.argument('path')
-def main(verbose, path):
+@click.argument('python_source')
+@click.argument('html_out')
+def main(verbose, python_source, html_out):
     """Console script for showvalues."""
     if verbose:
         logging.basicConfig(level=logging.DEBUG)
-
-    with open(path) as code_file:
-        code = code_file.read()
-    uncovereds = find_uncovered(code)
-    if uncovereds:
-        deleted = {u for u in uncovereds if u.type == DELETE}
-        nonified = {u for u in uncovereds if u.type == NONIFY}
-
-        click.echo(format_uncovereds(
-            deleted,
-            'stuff we could delete'))
-        click.echo(format_uncovereds(
-            nonified,
-            'function calls we could replace with None'))
-    else:
-        click.echo('Yay, every change we tried made it fail!')
-    return 0
-
+    write_html(python_source, python_source)
 
 if __name__ == "__main__":
     sys.exit(main())  # pragma: no cover
