@@ -5,7 +5,11 @@ from collections import Counter
 
 import asttokens
 
-from .execute import get_values_from_execution
+# need to not be relative for running "like_pytest.py"... hack?
+# current problem:
+# showvalues /Users/davidchudzicki/hypothesis-python/src/hypothesis/internal/conjecture/engine.py  hi.html && open hi.html
+# NameError: name 'attr' is not defined
+from showvalues.execute import get_values_from_execution
 
 
 class RangeFinder(NodeVisitor):
@@ -50,10 +54,10 @@ class RangeFinder(NodeVisitor):
             return self.generic_visit(node)
 
 
-def write_html(source_path, html_path):
+def write_html(source_path, html_path, values=None):
     with open(source_path) as source_file:
         source_code = source_file.read()
-    html = get_html_for_source(source_code)
+    html = get_html_for_source(source_code, values=values)
     with open(html_path, 'w') as html_file:
         html_file.write(html)
 
@@ -69,9 +73,11 @@ def get_ranges(code):
     return visitor.ranges
 
 
-def get_html_for_source(code):
+def get_html_for_source(code, values=None):
     ranges = get_ranges(code)
-    values = get_values_from_execution(code)
+    if values is None:
+        values = get_values_from_execution(code)
+    print(values)
 
     # needlessly quadratic
     ends_by_start = {r[0]: [r2[1] for r2 in ranges if r2[0] == r[0]]

@@ -14,6 +14,8 @@ from showvalues.execute import get_values_from_execution
 ])
 def test_get_values(code, expected):
     assert expected == get_values_from_execution(code)
+    from .hihi import f
+    f()
 
 
 

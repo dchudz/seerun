@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
 
 """Console script for showvalues."""
+import importlib
 import logging
 import sys
 import click
 
-from showvalues.html import write_html
+from showvalues.htmlize import write_html
 
 
 def format_uncovereds(uncovereds, description):
@@ -14,6 +15,36 @@ def format_uncovereds(uncovereds, description):
         return 'Lines with %s: %s' % (description, collection_str)
     else:
         return ''
+
+
+
+class WarnOnImport(object):
+    def __init__(self, *args):
+        self.module_names = args
+
+    def find_module(self, fullname, path=None):
+        if fullname in self.module_names:
+            self.path = path
+            return self
+        return None
+
+    def load_module(self, name):
+        if name in sys.modules:
+            return sys.modules[name]
+        module_info = importlib.find_module(name, self.path)
+        module = importlib.load_module(name, *module_info)
+        sys.modules[name] = module
+
+        logging.warning("Imported deprecated module %s", name)
+        return module
+
+class ImportFindPrint(object):
+    def __init__(self, *args):
+        self.module_names = args
+
+    def find_module(self, fullname, path=None):
+        print("%s: %s" % (fullname, path))
+        return None
 
 
 @click.command()

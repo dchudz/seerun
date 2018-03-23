@@ -4,7 +4,7 @@ from ast import *
 
 from asttokens import asttokens
 
-SAVE_FUNCTION_NAME = '__show_values_internal_save'
+SAVE_FUNCTION_NAME = '_show_values_internal_save'
 
 
 def node_pos_str(node):
@@ -46,8 +46,8 @@ def get_values_from_execution(source):
     def exec_tree(tree):
         exec(compile(tree, filename="<ast>", mode="exec"),
              {SAVE_FUNCTION_NAME: save,
-              '_values': _values},
-             {})
+              '_values': _values}
+             )
 
     tree = asttokens.ASTTokens(source, parse=True).tree
     SaveTransformer().visit(tree)
