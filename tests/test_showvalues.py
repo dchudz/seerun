@@ -29,14 +29,12 @@ def test_command_script_tracker():
 
 def test_command_module_tracker():
     """Test the CLI."""
-    runner = CliRunner()
-    print(cli.trackmodule)
+    # had some trouble with the Click test runner, so subprocess.call it is.
     with NamedTemporaryFile(suffix='.html', delete=False) as temp_html:
-        result = runner.invoke(cli.trackmodule,
-                               args=['/Users/davidchudzicki/showvalues/showvalues/just_for_a_test.py',
-                                     temp_html.name,
-                                     '--runscript', 'tests/call_add.py'])
-        # how to add option? tests/b.py
+        import subprocess
+        subprocess.call(['viewrun', 'trackmodule',
+                        '/Users/davidchudzicki/showvalues/showvalues/just_for_a_test.py',
+                        temp_html.name,
+                        '--runscript', 'tests/call_add.py'])
         print(temp_html.name)
-        # assert b'77777' in temp_html.read()
-    assert result.exit_code == 0
+        assert b'77777' in temp_html.read()
