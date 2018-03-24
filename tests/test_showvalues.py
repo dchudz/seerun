@@ -13,14 +13,30 @@ from showvalues.execute import get_values_from_execution
 
 ])
 def test_get_values(code, expected):
+    print(code)
     assert expected == get_values_from_execution(code)
 
 
 
-def test_command_line_interface():
+def test_command_script_tracker():
     """Test the CLI."""
     runner = CliRunner()
     with NamedTemporaryFile(suffix='.html', delete=False) as temp_html:
-        result = runner.invoke(cli.main,
+        result = runner.invoke(cli.trackscript,
                                args=['tests/example.py', temp_html.name])
+    assert result.exit_code == 0
+
+
+def test_command_module_tracker():
+    """Test the CLI."""
+    runner = CliRunner()
+    print(cli.trackmodule)
+    with NamedTemporaryFile(suffix='.html', delete=False) as temp_html:
+        result = runner.invoke(cli.trackmodule,
+                               args=['/Users/davidchudzicki/showvalues/showvalues/just_for_a_test.py',
+                                     temp_html.name,
+                                     '--runscript', 'tests/call_add.py'])
+        # how to add option? tests/b.py
+        print(temp_html.name)
+        # assert b'77777' in temp_html.read()
     assert result.exit_code == 0

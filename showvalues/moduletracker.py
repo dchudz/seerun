@@ -6,13 +6,16 @@ import os
 import types
 
 import asttokens
-from execute import SaveTransformer, SAVE_FUNCTION_NAME
+from showvalues.execute import SaveTransformer, SAVE_FUNCTION_NAME
 
-class MyHook(object):
-    """PEP302 Import hook which rewrites asserts."""
-    def __init__(self, function_to_insert):
+
+class RewriteHook(object):
+    """Shamelessly copies pytest."""
+
+    def __init__(self, function_to_insert, path_to_hook):
         self.modules = {}
         self.function_to_insert = function_to_insert
+        self.path_to_hook = path_to_hook
 
     def find_module(self, name, path=None):
         names = name.rsplit(".", 1)
@@ -49,28 +52,21 @@ class MyHook(object):
         else:
             fn = os.path.join(pth, name.rpartition(".")[2] + ".py")
 
-        # hypothesis.internal.conjecture.engine /Users/davidchudzicki/hypothesis-python/src/hypothesis/internal/conjecture/engine.py
-        if name not in ['hi', 'hypothesis.internal.conjecture.engine']:
-            return None
-        print(name, fn)
-        with open(fn) as file:
-            source = file.read()
+        if fn == self.path_to_hook:
+            with open(fn) as file:
+                source = file.read()
 
-        tree = asttokens.ASTTokens(source, parse=True).tree
-        SaveTransformer().visit(tree)
-        ast.fix_missing_locations(tree)
-        co = compile(tree, fn, "exec", dont_inherit=True)
-        self.modules[name] = co
-        return self
-
-    def _should_rewrite(self, name, fn_pypath, state):
-        return False
+            tree = asttokens.ASTTokens(source, parse=True).tree
+            SaveTransformer().visit(tree)
+            ast.fix_missing_locations(tree)
+            co = compile(tree, fn, "exec", dont_inherit=True)
+            self.modules[name] = co
+            return self
 
     def load_module(self, name):
         co = self.modules.pop(name)
         mod = sys.modules[name] = types.ModuleType(name)
         mod.__dict__[SAVE_FUNCTION_NAME] = self.function_to_insert
-        print(mod.__dict__)
         try:
             mod.__file__ = co.co_filename
             mod.__loader__ = self
@@ -82,48 +78,25 @@ class MyHook(object):
         return sys.modules[name]
 
 
-_values = {}
-
-
-def save_and_return(value, location):
-    _values[location] = repr(value)
-    # print(value)
-    # print(location)
-    return value
-
-
-
-
-
-def install():
+def install_import_hook(function_to_add, path_to_hook):
     """Inserts the finder into the import machinery"""
-    sys.meta_path.insert(0, MyHook(save_and_return))
-
-install()
+    sys.meta_path.insert(0, RewriteHook(function_to_add, path_to_hook))
 
 
-# source = 'showvalues/hi.py'
-# import hi
-# print(hi.aaa)
-# hi.f()
+def get_values_from_execution(module_path_to_watch, script_to_run):
+    _values = {}
 
-source = '/Users/davidchudzicki/hypothesis-python/src/hypothesis/internal/conjecture/engine.py'
+    def save_and_return(value, location):
+        _values[location] = repr(value)
+        return value
 
-from hypothesis import given, strategies as st
+    install_import_hook(save_and_return, module_path_to_watch)
+    with open(script_to_run) as script_file:
+        script_source = script_file.read()
 
-@given(st.integers())
-def f(x):
-    pass
+    exec(script_source,
+         {SAVE_FUNCTION_NAME: save_and_return, '_values': _values}
+         )
 
-f()
+    return _values
 
-
-print(_values)
-
-from htmlize import write_html
-
-# write_html('showvalues/hi.py', 'hi.html')
-
-write_html(source,
-           'hi.html',
-           values=_values)

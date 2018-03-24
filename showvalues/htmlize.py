@@ -54,8 +54,8 @@ class RangeFinder(NodeVisitor):
             return self.generic_visit(node)
 
 
-def write_html(source_path, html_path, values=None):
-    with open(source_path) as source_file:
+def write_html(*, script_path, html_path, values=None):
+    with open(script_path) as source_file:
         source_code = source_file.read()
     html = get_html_for_source(source_code, values=values)
     with open(html_path, 'w') as html_file:
@@ -77,7 +77,6 @@ def get_html_for_source(code, values=None):
     ranges = get_ranges(code)
     if values is None:
         values = get_values_from_execution(code)
-    print(values)
 
     # needlessly quadratic
     ends_by_start = {r[0]: [r2[1] for r2 in ranges if r2[0] == r[0]]

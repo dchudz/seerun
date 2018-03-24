@@ -15,7 +15,7 @@ setup(
                 " (deleted, replaced) with tests still passing (be careful!)",
     entry_points={
         'console_scripts': [
-            'showvalues=showvalues.cli:main',
+            'viewrun=showvalues.cli:main',
         ],
     },
     install_requires=['Click>=6.0', 'asttokens'],

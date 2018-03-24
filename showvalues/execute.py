@@ -33,7 +33,7 @@ def get_values_from_execution(source):
     character ranges to values (for nodes whose values we saved)."""
     _values = {}
 
-    def save(value, location):
+    def save_and_return(value, location):
         """Nodes are replaced by calls to this, with original node as arg.
 
         The original node is evaluated as usual (as the argument, now). Then
@@ -45,7 +45,7 @@ def get_values_from_execution(source):
 
     def exec_tree(tree):
         exec(compile(tree, filename="<ast>", mode="exec"),
-             {SAVE_FUNCTION_NAME: save,
+             {SAVE_FUNCTION_NAME: save_and_return,
               '_values': _values}
              )
 

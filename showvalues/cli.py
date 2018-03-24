@@ -1,61 +1,58 @@
 # -*- coding: utf-8 -*-
 
 """Console script for showvalues."""
-import importlib
 import logging
 import sys
 import click
 
+from showvalues import moduletracker
 from showvalues.htmlize import write_html
 
 
-def format_uncovereds(uncovereds, description):
-    if uncovereds:
-        collection_str = ', '.join(str(u.lineno) for u in sorted(uncovereds))
-        return 'Lines with %s: %s' % (description, collection_str)
-    else:
-        return ''
+# seerun?
+
+@click.group()
+def main():
+    return 11
 
 
-
-class WarnOnImport(object):
-    def __init__(self, *args):
-        self.module_names = args
-
-    def find_module(self, fullname, path=None):
-        if fullname in self.module_names:
-            self.path = path
-            return self
-        return None
-
-    def load_module(self, name):
-        if name in sys.modules:
-            return sys.modules[name]
-        module_info = importlib.find_module(name, self.path)
-        module = importlib.load_module(name, *module_info)
-        sys.modules[name] = module
-
-        logging.warning("Imported deprecated module %s", name)
-        return module
-
-class ImportFindPrint(object):
-    def __init__(self, *args):
-        self.module_names = args
-
-    def find_module(self, fullname, path=None):
-        print("%s: %s" % (fullname, path))
-        return None
-
-
-@click.command()
-@click.option('-v', '--verbose', is_flag=True, help='Enables verbose mode')
-@click.argument('python_source')
+@main.command()
+@click.argument('script')
 @click.argument('html_out')
-def main(verbose, python_source, html_out):
-    """Console script for showvalues."""
-    if verbose:
-        logging.basicConfig(level=logging.DEBUG)
-    write_html(python_source, html_out)
+def trackscript(script, html_out):
+    """TODO"""
+    write_html(script_path=script, html_path=html_out)
 
-if __name__ == "__main__":
-    sys.exit(main())  # pragma: no cover
+
+@main.command()
+@click.argument('modulepath')
+@click.argument('html_out')
+@click.option('--runscript',
+              default=None,
+              help="Path to the script you want to run")
+@click.option('--runmodule',
+              default=None,
+              help="???")
+def trackmodule(modulepath, html_out, runscript, runmodule):
+    """TODO"""
+    click.echo("runscei: " + runscript)
+    if runscript and runmodule:
+        raise click.ClickException(
+            'You provided --runscript and --runmodule. Instead, '
+            'provide exactly one.')
+    if runmodule:
+        raise click.ClickException(
+            'Sorry, --runmodule is not implemented yet. I lied.')
+    if runscript:
+        print("if runscript:")
+        values = moduletracker.get_values_from_execution(modulepath, runscript)
+        print("values: %r" % values)
+
+        write_html(script_path=modulepath, html_path=html_out, values=values)
+
+        click.echo("something good should happen now")
+
+
+#
+# if __name__ == "__main__":
+#     sys.exit(main())  # pragma: no cover
