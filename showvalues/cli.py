@@ -1,19 +1,14 @@
-# -*- coding: utf-8 -*-
-
-"""Console script for showvalues."""
-import logging
-import sys
 import click
 
 from showvalues import moduletracker
 from showvalues.htmlize import write_html
 
 
-# seerun?
+# new name: seerun?
 
 @click.group()
 def main():
-    return 11
+    pass
 
 
 @main.command()
@@ -24,35 +19,34 @@ def trackscript(script, html_out):
     write_html(script_path=script, html_path=html_out)
 
 
-@main.command()
-@click.argument('modulepath')
-@click.argument('html_out')
-@click.option('--runscript',
-              default=None,
-              help="Path to the script you want to run")
-@click.option('--runmodule',
-              default=None,
-              help="???")
-def trackmodule(modulepath, html_out, runscript, runmodule):
+@main.command(context_settings=dict(
+    ignore_unknown_options=True,
+))
+@click.argument('trackpath')
+@click.argument('htmlout')
+@click.option('--runscript', default=False, flag_value=True, help='Run a script or a module?')
+@click.option('--runmodule', default=False, flag_value=True, help='Run a script or a module?')
+@click.argument('args',
+                default=None,
+                nargs=-1,
+                type=click.UNPROCESSED,
+                # help="Path to the script you want to run"
+                )
+def trackmodule(trackpath, htmlout, runscript, runmodule, args):
     """TODO"""
-    click.echo("runscei: " + runscript)
-    if runscript and runmodule:
+    click.echo(args)
+    click.echo(runscript)
+    click.echo(runmodule)
+    if runscript + runmodule != 1:
         raise click.ClickException(
-            'You provided --runscript and --runmodule. Instead, '
-            'provide exactly one.')
+            'Provide exactly one of  --runscript and --runmodule.')
     if runmodule:
         raise click.ClickException(
             'Sorry, --runmodule is not implemented yet. I lied.')
     if runscript:
-        print("if runscript:")
-        values = moduletracker.get_values_from_execution(modulepath, runscript)
-        print("values: %r" % values)
-
-        write_html(script_path=modulepath, html_path=html_out, values=values)
-
-        click.echo("something good should happen now")
-
-
-#
-# if __name__ == "__main__":
-#     sys.exit(main())  # pragma: no cover
+        print("hi")
+        script_to_run = args[0]
+        values = moduletracker.get_values_from_execution(
+            trackpath, script_to_run, args)
+        print(values)
+        write_html(script_path=trackpath, html_path=htmlout, values=values)

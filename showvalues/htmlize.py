@@ -9,7 +9,7 @@ import asttokens
 # current problem:
 # showvalues /Users/davidchudzicki/hypothesis-python/src/hypothesis/internal/conjecture/engine.py  hi.html && open hi.html
 # NameError: name 'attr' is not defined
-from showvalues.execute import get_values_from_execution
+from showvalues.scripttracker import get_values_from_execution
 
 
 class RangeFinder(NodeVisitor):

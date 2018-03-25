@@ -18,7 +18,7 @@ setup(
             'viewrun=showvalues.cli:main',
         ],
     },
-    install_requires=['Click>=6.0', 'asttokens'],
+    install_requires=['Click>=6.0', 'asttokens>=1.1'],
     include_package_data=True,
     keywords='showvalues',
     name='showvalues',

@@ -1,12 +1,14 @@
 import ast
 import imp
-import sys
-
 import os
+import sys
 import types
 
 import asttokens
-from showvalues.execute import SaveTransformer, SAVE_FUNCTION_NAME
+
+from .run import run_script
+from showvalues.scripttracker import SAVE_FUNCTION_NAME
+from .ast_rewrite import SaveTransformer
 
 
 class RewriteHook(object):
@@ -83,7 +85,7 @@ def install_import_hook(function_to_add, path_to_hook):
     sys.meta_path.insert(0, RewriteHook(function_to_add, path_to_hook))
 
 
-def get_values_from_execution(module_path_to_watch, script_to_run):
+def get_values_from_execution(module_path_to_watch, script_to_run, args):
     _values = {}
 
     def save_and_return(value, location):
@@ -91,12 +93,8 @@ def get_values_from_execution(module_path_to_watch, script_to_run):
         return value
 
     install_import_hook(save_and_return, module_path_to_watch)
-    with open(script_to_run) as script_file:
-        script_source = script_file.read()
-
-    exec(script_source,
-         {SAVE_FUNCTION_NAME: save_and_return, '_values': _values}
-         )
+    run_script(script_to_run, args,
+               environment={SAVE_FUNCTION_NAME: save_and_return,
+                            '_values': _values})
 
     return _values
-
