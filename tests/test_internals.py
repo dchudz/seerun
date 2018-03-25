@@ -10,5 +10,5 @@ from showvalues.scripttracker import get_values_from_execution
 ])
 def test_get_values(code, expected):
     print(code)
-    assert expected == get_values_from_execution(code)
+    assert expected == get_values_from_execution(code, ['<ast>'])
 

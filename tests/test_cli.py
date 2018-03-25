@@ -8,11 +8,14 @@ from showvalues import cli
 
 def test_command_script_tracker():
     """Test the CLI."""
-    runner = CliRunner()
     with NamedTemporaryFile(suffix='.html', delete=False) as temp_html:
-        result = runner.invoke(cli.trackscript,
-                               args=['tests/example.py', temp_html.name])
-    assert result.exit_code == 0
+        import subprocess
+        subprocess.call(
+            ['viewrun', 'trackscript',
+             temp_html.name,
+             'tests/scripts/add_received_args.py',
+             '33333', '44444'])
+        assert b'77777' in temp_html.read()
 
 
 @pytest.mark.parametrize('script', [
@@ -24,11 +27,11 @@ def test_module_tracker_script_no_args(script):
     # had some trouble with the Click test runner, so subprocess.call it is.
     with NamedTemporaryFile(suffix='.html', delete=False) as temp_html:
         import subprocess
-        subprocess.call(['viewrun', 'trackmodule',
-                         '/Users/davidchudzicki/showvalues/showvalues'
-                         '/just_for_a_test.py',
-                         temp_html.name,
-                         '--runscript', script])
+        subprocess.call(
+            ['viewrun', 'trackmodule',
+             '/Users/davidchudzicki/showvalues/showvalues/just_for_a_test.py',
+             temp_html.name,
+             '--runscript', script])
         print(temp_html.name)
         assert b'77777' in temp_html.read()
 
@@ -38,12 +41,12 @@ def test_module_tracker_with_args():
     # had some trouble with the Click test runner, so subprocess.call it is.
     with NamedTemporaryFile(suffix='.html', delete=False) as temp_html:
         import subprocess
-        subprocess.call(['viewrun', 'trackmodule',
-                         '/Users/davidchudzicki/showvalues/showvalues'
-                         '/just_for_a_test.py',
-                         temp_html.name,
-                         '--runscript',
-                         'tests/scripts/receive_args_call_add.py',
-                         '33333', '44444'])
+        subprocess.call(
+            ['viewrun', 'trackmodule',
+             '/Users/davidchudzicki/showvalues/showvalues/just_for_a_test.py',
+             temp_html.name,
+             '--runscript',
+             'tests/scripts/receive_args_call_add.py',
+             '33333', '44444'])
         print(temp_html.name)
         assert b'77777' in temp_html.read()

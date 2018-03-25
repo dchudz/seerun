@@ -6,7 +6,7 @@ import types
 
 import asttokens
 
-from .run import run_script
+from .run import run
 from showvalues.scripttracker import SAVE_FUNCTION_NAME
 from .ast_rewrite import SaveTransformer
 
@@ -93,8 +93,11 @@ def get_values_from_execution(module_path_to_watch, script_to_run, args):
         return value
 
     install_import_hook(save_and_return, module_path_to_watch)
-    run_script(script_to_run, args,
-               environment={SAVE_FUNCTION_NAME: save_and_return,
+
+    with open(script_to_run) as script_file:
+        script_source = script_file.read()
+    run(script_source, args,
+        environment={SAVE_FUNCTION_NAME: save_and_return,
                             '_values': _values})
 
     return _values
