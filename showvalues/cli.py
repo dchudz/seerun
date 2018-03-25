@@ -1,4 +1,5 @@
 import click
+import os
 
 from .moduletracker import get_values_from_module_execution
 from . import moduletracker, scripttracker
@@ -48,9 +49,7 @@ def trackmodule(trackpath, htmlout, runscript, runmodule, args):
     """TODO"""
     #TODO: relative to absolute paths
     #TODO: nice error when len(args) == 0
-    click.echo(args)
-    click.echo(runscript)
-    click.echo(runmodule)
+    trackpath = os.path.abspath(trackpath)
     if runscript + runmodule != 1:
         raise click.ClickException(
             'Provide exactly one of  --runscript and --runmodule.')
