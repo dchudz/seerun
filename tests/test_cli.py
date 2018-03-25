@@ -28,7 +28,7 @@ def test_module_tracker_script_no_args(script, temp_html):
     """Test the CLI."""
     subprocess.call(
         ['viewrun', 'trackmodule',
-         'showvalues/just_for_a_test.py',
+         'tests/just_for_a_test.py',
          temp_html.name,
          '--runscript', script])
     assert b'77777' in temp_html.read()
@@ -38,7 +38,7 @@ def test_module_tracker_script_with_args(temp_html):
     """Test the CLI."""
     subprocess.call(
         ['viewrun', 'trackmodule',
-         'showvalues/just_for_a_test.py',
+         'tests/just_for_a_test.py',
          temp_html.name,
          '--runscript',
          'tests/scripts/receive_args_call_add.py',
@@ -49,7 +49,7 @@ def test_module_tracker_script_with_args(temp_html):
 def test_module_tracker_module(temp_html):
     subprocess.call(
         ['viewrun', 'trackmodule',
-         'showvalues/just_for_a_test.py',
+         'tests/just_for_a_test.py',
          temp_html.name,
          '--runmodule',
          'tests.scripts.receive_args_call_add',
