@@ -1,10 +1,10 @@
 import sys
 
-from tests import just_for_a_test
+from tests import add
 
 print(sys.argv)
 a, b = sys.argv[1:]
 a, b = int(a), int(b)
 print("executing call add")
-print(just_for_a_test.add(a, b))
+print(add.add(a, b))
 print("executed call add")
