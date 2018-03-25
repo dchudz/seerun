@@ -6,7 +6,7 @@ import types
 
 import asttokens
 
-from .run import run
+from .run import run, run_python_module
 from showvalues.scripttracker import SAVE_FUNCTION_NAME
 from .ast_rewrite import SaveTransformer
 
@@ -85,7 +85,8 @@ def install_import_hook(function_to_add, path_to_hook):
     sys.meta_path.insert(0, RewriteHook(function_to_add, path_to_hook))
 
 
-def get_values_from_execution(module_path_to_watch, script_to_run, args):
+def get_values_from_script_execution(module_path_to_watch, script_to_run,
+                                     args):
     _values = {}
 
     def save_and_return(value, location):
@@ -98,6 +99,23 @@ def get_values_from_execution(module_path_to_watch, script_to_run, args):
         script_source = script_file.read()
     run(script_source, args,
         environment={SAVE_FUNCTION_NAME: save_and_return,
-                            '_values': _values})
+                     '_values': _values})
+
+    return _values
+
+
+def get_values_from_module_execution(module_path_to_watch, module_to_run,
+                                     args):
+    _values = {}
+
+    def save_and_return(value, location):
+        _values[location] = repr(value)
+        return value
+
+    install_import_hook(save_and_return, module_path_to_watch)
+
+    run_python_module(module_to_run, args,
+                      environment={SAVE_FUNCTION_NAME: save_and_return,
+                                   '_values': _values})
 
     return _values

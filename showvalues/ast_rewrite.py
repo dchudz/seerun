@@ -17,6 +17,7 @@ class SaveTransformer(NodeTransformer):
         # restrict to certain types helps avoid that
         # better would probably be: just don't explore the left side of
         # an assign
+        # TODO: be more liberal!
         ok_types = (BinOp, Call, Compare)
         if isinstance(node, ok_types):
             return Call(func=Name(id=SAVE_FUNCTION_NAME, ctx=Load()),

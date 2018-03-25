@@ -1,5 +1,6 @@
 import click
 
+from .moduletracker import get_values_from_module_execution
 from . import moduletracker, scripttracker
 from showvalues.htmlize import write_html
 
@@ -45,6 +46,8 @@ def trackscript(html_out, args):
                 )
 def trackmodule(trackpath, htmlout, runscript, runmodule, args):
     """TODO"""
+    #TODO: relative to absolute paths
+    #TODO: nice error when len(args) == 0
     click.echo(args)
     click.echo(runscript)
     click.echo(runmodule)
@@ -52,12 +55,11 @@ def trackmodule(trackpath, htmlout, runscript, runmodule, args):
         raise click.ClickException(
             'Provide exactly one of  --runscript and --runmodule.')
     if runmodule:
-        raise click.ClickException(
-            'Sorry, --runmodule is not implemented yet. I lied.')
+        # TODO: this needs a test! not sure the best way to test it cleanly.
+        module_to_run = args[0]
+        values = get_values_from_module_execution(trackpath, module_to_run, args)
     if runscript:
-        print("hi")
         script_to_run = args[0]
-        values = moduletracker.get_values_from_execution(
+        values = moduletracker.get_values_from_script_execution(
             trackpath, script_to_run, args)
-        print(values)
-        write_html(script_path=trackpath, html_path=htmlout, values=values)
+    write_html(script_path=trackpath, html_path=htmlout, values=values)
