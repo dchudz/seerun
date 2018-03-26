@@ -88,6 +88,7 @@ def run(script_source_or_compiled, args, environment, path=None):
              )
     except SystemExit as e:
         if e.code != 0:
+            # Don't make noise about SystemExit(0) - that's normal.
             logging.exception('got exception executing tranformed tree')
     except (Exception, SystemExit):
         logging.exception('got exception executing tranformed tree')
