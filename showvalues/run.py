@@ -1,4 +1,11 @@
-"""Thanks coverage.py"""
+"""Functions for running a specified Python script or module.
+
+A lot of the was taken from coverage.py:
+https://bitbucket.org/ned/coveragepy/src/a31983fd62940d4f039de21dc3ce84c8c659b831/coverage/execfile.py
+
+Probably we're missing some stuff I should have taken, and have some stuff
+that wasn't necessary to take.
+"""
 import logging
 import sys
 import types
@@ -47,20 +54,16 @@ def run_python_module(modulename, args, environment):
     element naming the module being executed.
 
     """
-    args = list(args)
+
     pathname, packagename = find_module(modulename)
 
     pathname = os.path.abspath(pathname)
-    print(pathname)
-    print(args)
+    args = list(args)
     args[0] = pathname
-    print(pathname)
-    run_python_file(pathname, args, environment, package=packagename,
-                    modulename=modulename, path0="")
+    run_python_file(pathname, args, environment)
 
 
-def run_python_file(path, args, environment, package=None, modulename=None,
-                    path0=None):
+def run_python_file(path, args, environment):
     with open(path) as file:
         source = file.read()
     run(source, args, environment, path=path)
@@ -83,9 +86,11 @@ def run(script_source_or_compiled, args, environment, path=None):
               **environment
               }
              )
-    except (Exception, SystemExit):  # don't want pytest exiting on us!!
+    except SystemExit as e:
+        if e.code != 0:
+            logging.exception('got exception executing tranformed tree')
+    except (Exception, SystemExit):
         logging.exception('got exception executing tranformed tree')
-    # TODO: no message for SystemExit(1)
     finally:
         sys.argv = old_sys_argv
         sys.modules['__main__'] = old_main_mod
