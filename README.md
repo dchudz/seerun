@@ -24,7 +24,9 @@ Todo before release:
   - script
   - module:
 - save/show multiple values
-
+- new name, seerun
+- cli docs
+- docstrings everywhere
 
 
 Issues for later:

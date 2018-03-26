@@ -22,9 +22,6 @@ class RangeFinder(NodeVisitor):
 
     ranges = [tokens.get_text_range(node)
               for node in asttokens.util.walk(tokens.tree)]
-
-    TODO: this could probably be replaced with a call to
-    asttokens.util.visit_tree.
     """
 
     def __init__(self):
@@ -73,10 +70,8 @@ def get_ranges(code):
     return visitor.ranges
 
 
-def get_html_for_source(code, values=None):
+def get_html_for_source(code, values):
     ranges = get_ranges(code)
-    if values is None:
-        values = get_values_from_execution(code)
 
     # needlessly quadratic
     ends_by_start = {r[0]: [r2[1] for r2 in ranges if r2[0] == r[0]]
