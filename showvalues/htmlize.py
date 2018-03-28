@@ -87,9 +87,12 @@ def get_html_for_source(code, values):
                 html_lines.append(
                     '</span>')  # end the text span from previous ending
             for end in ends_for_this_start:
-                value = values.get(id_string_from_start_end(i, end))
-                html_lines.append('<span class="node" id="%s">' % (
-                    html.escape(value) if value else "dunno"))
+                values_for_loc = values.get(id_string_from_start_end(i, end))
+                values_str = '<hr>'.join('<pre>' + html.escape(v) + '</pre>'
+                                         for v in values_for_loc) \
+                    if values_for_loc else 'dunno'
+                # value_str = html.escape(repr(value)) if value else 'dunno'
+                html_lines.append('<span class="node" id="%s">' % values_str)
             html_lines.append('<span title="hi" class="text">')
         if ends[i]:
             html_lines.append('</span>')  # end the text span
@@ -124,7 +127,7 @@ html, body {margin: 0; height: 100%%; overflow: hidden}
     float: left;
     width: 40%%;
     padding: 10px;
-    height: 300px; /* Should be removed. Only for demonstration */
+    height: 7000px;
     overflow: scroll;
 }
 /* Clear floats after the columns */
@@ -163,7 +166,7 @@ html, body {margin: 0; height: 100%%; overflow: hidden}
         $('.text').mouseover(function() {
           parent = $(this).parent();
           parent.css("background-color", "yellow");
-          $(".column2").text(parent[0].id)
+          $(".column2").html(parent[0].id)
         });
         $('.text').mouseout(function() {
           $(this).parent().css("background-color", "");

@@ -14,6 +14,7 @@ import importlib
 import importlib.util
 
 import os
+from collections import defaultdict
 
 from .ast_rewrite import SAVE_FUNCTION_NAME
 
@@ -100,7 +101,7 @@ def run(script_source_or_compiled, args, environment, path=None):
 
 
 def get_execution_environment():
-    _seerun_saved_values = {}
+    _seerun_saved_values = defaultdict(list)
 
     def save_and_return(value, location):
         """Nodes are replaced by calls to this, with original node as arg.
@@ -109,7 +110,7 @@ def get_execution_environment():
         we save the value, and return it so it can play the same role further
         up the call stack that it did originally.
         """
-        _seerun_saved_values[location] = repr(value)
+        _seerun_saved_values[location].append(repr(value))
         return value
 
     return {SAVE_FUNCTION_NAME: save_and_return,
