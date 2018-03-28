@@ -18,19 +18,24 @@ viewrun trackmodule /Users/davidchudzicki/hypothesis-python/src/hypothesis/inter
 
 Todo before release:
 
+- try it!
 - README sections
  - intro / summary
  - usage examples
   - script
   - module:
-- save/show multiple values
 - new name, seerun
 - cli docs
-- docstrings everywhere
 
 
 Issues for later:
 
 - specify module as "some.module.submodule" instead of the path
+- docstrings everywhere
 
 
+
+
+Done:
+
+- save/show multiple values
