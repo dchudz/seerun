@@ -17,8 +17,6 @@ import os
 
 from .ast_rewrite import SAVE_FUNCTION_NAME
 
-NoSource = Exception  # TODO wtf
-
 
 def find_module(modulename):
     """Find the module named `modulename`.
@@ -29,9 +27,9 @@ def find_module(modulename):
     try:
         spec = importlib.util.find_spec(modulename)
     except ImportError as err:
-        raise NoSource(str(err))
+        raise Exception(str(err))
     if not spec:
-        raise NoSource("No module named %r" % (modulename,))
+        raise Exception("No module named %r" % (modulename,))
     pathname = spec.origin
     packagename = spec.name
     if pathname.endswith("__init__.py") and not modulename.endswith(

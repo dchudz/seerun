@@ -84,9 +84,9 @@ def install_import_hook(function_to_add, path_to_hook):
     sys.meta_path.insert(0, RewriteHook(function_to_add, path_to_hook))
 
 
-def get_values_from_script_execution(module_path_to_watch, script_to_run, args):
+def get_values_from_script_execution(path_to_watch, script_to_run, args):
     environment = get_execution_environment()
-    install_import_hook(environment[SAVE_FUNCTION_NAME], module_path_to_watch)
+    install_import_hook(environment[SAVE_FUNCTION_NAME], path_to_watch)
     with open(script_to_run) as script_file:
         script_source = script_file.read()
 
@@ -95,8 +95,8 @@ def get_values_from_script_execution(module_path_to_watch, script_to_run, args):
 
 
 
-def get_values_from_module_execution(module_path_to_watch, module_to_run, args):
+def get_values_from_module_execution(path_to_watch, module_to_run, args):
     environment = get_execution_environment()
-    install_import_hook(environment[SAVE_FUNCTION_NAME], module_path_to_watch)
+    install_import_hook(environment[SAVE_FUNCTION_NAME], path_to_watch)
     run_python_module(module_to_run, args, environment=environment)
     return environment['_seerun_saved_values']

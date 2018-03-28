@@ -17,5 +17,4 @@ def get_values_from_execution(source, args):
     environment = get_execution_environment()
     run(compile(tree, filename="<ast>", mode="exec"), args,
         environment=environment)
-
     return environment['_seerun_saved_values']
