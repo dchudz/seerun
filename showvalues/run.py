@@ -1,7 +1,8 @@
 """Functions for running a specified Python script or module.
 
 A lot of the was taken from coverage.py:
-https://bitbucket.org/ned/coveragepy/src/a31983fd62940d4f039de21dc3ce84c8c659b831/coverage/execfile.py
+https://bitbucket.org/ned/coveragepy/src
+/a31983fd62940d4f039de21dc3ce84c8c659b831/coverage/execfile.py
 
 Probably we're missing some stuff I should have taken, and have some stuff
 that wasn't necessary to take.
@@ -12,10 +13,12 @@ import types
 import importlib
 import importlib.util
 
-
 import os
 
-NoSource = Exception
+from .ast_rewrite import SAVE_FUNCTION_NAME
+
+NoSource = Exception  # TODO wtf
+
 
 def find_module(modulename):
     """Find the module named `modulename`.
@@ -31,7 +34,8 @@ def find_module(modulename):
         raise NoSource("No module named %r" % (modulename,))
     pathname = spec.origin
     packagename = spec.name
-    if pathname.endswith("__init__.py") and not modulename.endswith("__init__"):
+    if pathname.endswith("__init__.py") and not modulename.endswith(
+            "__init__"):
         mod_main = modulename + ".__main__"
         spec = importlib.util.find_spec(mod_main)
         if not spec:
@@ -95,3 +99,20 @@ def run(script_source_or_compiled, args, environment, path=None):
     finally:
         sys.argv = old_sys_argv
         sys.modules['__main__'] = old_main_mod
+
+
+def get_execution_environment():
+    _seerun_saved_values = {}
+
+    def save_and_return(value, location):
+        """Nodes are replaced by calls to this, with original node as arg.
+
+        The original node is evaluated as usual (as the argument, now). Then
+        we save the value, and return it so it can play the same role further
+        up the call stack that it did originally.
+        """
+        _seerun_saved_values[location] = repr(value)
+        return value
+
+    return {SAVE_FUNCTION_NAME: save_and_return,
+            '_seerun_saved_values': _seerun_saved_values}
