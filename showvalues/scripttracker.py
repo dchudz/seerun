@@ -6,7 +6,7 @@ from .ast_rewrite import SaveTransformer
 from .run import run, get_execution_environment
 
 
-def get_values_from_execution(source, args):
+def get_values_from_execution(source, args, raise_exceptions=False):
     """Execute the source and return a dictionary mapping source code
     character ranges to values (for nodes whose values we saved)."""
 
@@ -16,6 +16,6 @@ def get_values_from_execution(source, args):
 
     environment = get_execution_environment()
     run(compile(tree, filename="<ast>", mode="exec"), args,
-        environment=environment)
+        environment=environment, raise_exceptions=raise_exceptions)
     # For simplicity, turn the defaultdict into a dict.
     return dict(environment['_seerun_saved_values'])

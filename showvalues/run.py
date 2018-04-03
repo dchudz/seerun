@@ -9,6 +9,7 @@ that wasn't necessary to take.
 """
 import logging
 import sys
+import traceback
 import types
 import importlib
 import importlib.util
@@ -72,7 +73,22 @@ def run_python_file(path, args, environment):
     run(source, args, environment, path=path)
 
 
-def run(script_source_or_compiled, args, environment, path=None):
+def run(script_source_or_compiled, args, environment, path=None,
+        raise_exceptions=False):
+    """
+
+    Args:
+        script_source_or_compiled:
+        args:
+        environment:
+        path:
+        raise_exceptions: usually we want to run the code and report results even
+                       if it fails. But disallowing failue is helpful for
+                       tests.
+
+    Returns:
+
+    """
     # thanks coverage.py!
     old_main_mod = sys.modules['__main__']
     main_mod = types.ModuleType('__main__')
@@ -94,7 +110,10 @@ def run(script_source_or_compiled, args, environment, path=None):
             # Don't make noise about SystemExit(0) - that's normal.
             logging.exception('got exception executing tranformed tree')
     except (Exception, SystemExit):
-        logging.exception('got exception executing tranformed tree')
+        if raise_exceptions:
+            raise
+        else:
+            logging.exception('`got exception executing tranformed tree')
     finally:
         sys.argv = old_sys_argv
         sys.modules['__main__'] = old_main_mod
@@ -103,15 +122,22 @@ def run(script_source_or_compiled, args, environment, path=None):
 def get_execution_environment():
     _seerun_saved_values = defaultdict(list)
 
-    def save_and_return(value, location):
+    def _show_values_internal_save(value, location):
         """Nodes are replaced by calls to this, with original node as arg.
 
         The original node is evaluated as usual (as the argument, now). Then
         we save the value, and return it so it can play the same role further
         up the call stack that it did originally.
         """
-        _seerun_saved_values[location].append(repr(value))
+        frames = traceback.extract_stack(sys._getframe().f_back)
+        # Unless we skip instrumenting calls we generated, examples where the
+        # repr refers to itself lead to infinite recursion, e.g.:
+        #   def __repr__(self): return 'HoldsX(%r)' % (self.x,)
+        # Also we really only want to instrument the user's calls anyway.
+        # (Not ours.)
+        if '_show_values_internal_save' not in [frame.name for frame in frames]:
+            _seerun_saved_values[location].append(repr(value))
         return value
 
-    return {SAVE_FUNCTION_NAME: save_and_return,
+    return {SAVE_FUNCTION_NAME: _show_values_internal_save,
             '_seerun_saved_values': _seerun_saved_values}
