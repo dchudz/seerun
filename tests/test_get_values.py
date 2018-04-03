@@ -15,5 +15,3 @@ def test_get_values(code, expected):
     # Extra values are OK, since we won't necessarily bother writing down in
     # the test everything that we expect.
     assert expected.items() <= actual   .items()
-
-

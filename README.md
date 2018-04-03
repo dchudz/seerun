@@ -18,6 +18,9 @@ viewrun trackmodule /Users/davidchudzicki/hypothesis-python/src/hypothesis/inter
 
 Todo before release:
 
+- show more stuff
+ - A and B
+ -
 - try it!
 - README sections
  - intro / summary
