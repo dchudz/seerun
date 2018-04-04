@@ -1,21 +1,4 @@
 
-
-
-
-
-```
-viewrun trackmodule /Users/davidchudzicki/showvalues/showvalues/just_for_a_test.py hi.html --runscript tests/b.py && open hi.html
-```
-
-Run in hypothesis source directory:
-
-```
-viewrun trackmodule /Users/davidchudzicki/hypothesis-python/src/hypothesis/internal/conjecture/engine.py /Users/davidchudzicki/hypothesis-python/hi.html --runmodule pytest tests/cover/test_one_of.py
-```
-
-
-
-
 Todo before release:
 
 - show more stuff
@@ -38,33 +21,18 @@ Issues for later:
 - group stuff with the same stacktrace
 - combine with coverage so we know where to even look for anything
 - can we distinguish "we don't track this *kind* of thing" from "we didn't track this particular one"
-
+- make it not obscenely slow
 
 Done:
 
 - allow clicking
 - save/show multiple values
+- fix <>'s not showing up
+- fix for Starred expressions
 
 
-
-viewrun trackmodule /Users/davidchudzicki/hypothesis-python/src/hypothesis/internal/conjecture/engine.py ../hypothesis.html --runscript examples/hypothesis.py && open ../hypothesis.html
-
-
-## Maybe address:
-
-- missing from % operator
-
-
-
-
+Currently broken:
 
 ```
-def redraw_last(data, n):
-            u = target_data[0].blocks[-1][0]
-            if data.index + n <= u:
-                return target_data[0].buffer[data.index:data.index + n]
-            else:
-                return uniform(self.random, n)
+viewrun trackmodule /Users/davidchudzicki/hypothesis-python/src/hypothesis/strategies.py ../hypothesis.html --runscript examples/run_hypothesis.py && open ../hypothesis.html
 ```
-
-why is `target_data` an empty list and `target_data[0]` completely blank?

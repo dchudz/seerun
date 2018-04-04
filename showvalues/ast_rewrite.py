@@ -45,7 +45,15 @@ class SaveTransformer(NodeTransformer):
 
     def visit(self, node):
         self.generic_visit(node)
-        if isinstance(node, expr):
+        # We don't transform Starred expressions (stuff like "*[1,2]") because:
+        # (a) They break stuff, b/c we end up trying to evaluate
+        #     _show_values_internal_save with the wrong number of arguments
+        #     (I guess that's what the interpreter does when a "Starred"
+        #     expression is in the args list for a Call.)
+        # (b) We don't need to anyway -- with "*some_list", looking at
+        #     some_list without the star tells the user everything they need to
+        #     know.
+        if isinstance(node, expr) and not isinstance(node, Starred):
             return Call(func=Name(id=SAVE_FUNCTION_NAME, ctx=Load()),
                         args=[node, Str(node_pos_str(node))], keywords=[])
         else:
