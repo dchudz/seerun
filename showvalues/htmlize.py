@@ -88,7 +88,12 @@ def get_html_for_source(code, values):
                     '</span>')  # end the text span from previous ending
             for end in ends_for_this_start:
                 values_for_loc = values.get(id_string_from_start_end(i, end))
-                values_str = '<hr>'.join('<pre>' + html.escape(v) + '</pre>'
+                # silly double escaping because somewhere our stuff gets unescaped
+                # in the javascript `$(".column2").html(parent[0].id)`
+                #
+                # Without this, `examples/no_repr` doesn't show its
+                # repr (<class '__main__.MyClass'>) at all.
+                values_str = '<hr>'.join('<pre>' + html.escape(html.escape(v)) + '</pre>'
                                          for v in values_for_loc) \
                     if values_for_loc else 'dunno'
                 # value_str = html.escape(repr(value)) if value else 'dunno'
