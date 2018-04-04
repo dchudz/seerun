@@ -136,6 +136,14 @@ html, body {margin: 0; height: 100%%; overflow: hidden}
     display: table;
     clear: both;
 }
+
+.highlight-mouseover {
+  background: cyan;
+}
+.highlight-click {
+  background: yellow;
+}
+
 </style>
 </head>
 <body>
@@ -163,16 +171,30 @@ html, body {margin: 0; height: 100%%; overflow: hidden}
 
 <script>
     $(document).ready(function() {
-        $('.text').mouseover(function() {
+        $('.text').click(function() {
+
+          $('.highlight-click').not(parent).removeClass("highlight-click")
           parent = $(this).parent();
-          parent.css("background-color", "yellow");
+          parent.toggleClass( "highlight-click" );
           $(".column2").html(parent[0].id)
         });
+        $('.text').mouseover(function() {
+          parent = $(this).parent();
+          parent.addClass("highlight-mouseover");
+          if ($('.highlight-click').length === 0) {
+            // if there's a clicked expression, that takes precedence - don't do anything
+            $(".column2").html(parent[0].id)
+          }
+        });
         $('.text').mouseout(function() {
-          $(this).parent().css("background-color", "");
-          $(".column2").text("hello!")
+          $(this).parent().removeClass("highlight-mouseover")
         });
     });
+    $(document).on("click", function(e) {
+      if ($(e.target).is(".text") === false) {
+        $('.highlight-click').removeClass("highlight-click")
+      }
+  });
 </script>
 
 </html>
