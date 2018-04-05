@@ -13,6 +13,9 @@ from .ast_rewrite import SaveTransformer, SAVE_FUNCTION_NAME
 class RewriteHook(object):
     """Shamelessly copies pytest."""
 
+    # Lots of `# pragma: no cover` here because I haven't tested cases that
+    # need all of this, but I suspect it's better to keep than delete some of
+    # this stuff I copied from pytest.
     def __init__(self, function_to_insert, path_to_hook):
         self.modules = {}
         self.function_to_insert = function_to_insert
@@ -26,28 +29,28 @@ class RewriteHook(object):
             # Starting with Python 3.3, path is a _NamespacePath(), which
             # causes problems if not converted to list.
             path = list(path)
-            if len(path) == 1:
+            if len(path) == 1:  # pragma: no cover
                 pth = path[0]
         if pth is None:
             try:
                 found = imp.find_module(lastname, path)
                 fd, fn, desc = found
-            except ImportError:
-                return None
-            if fd is not None:
-                fd.close()
+            except ImportError:  # pragma: no cover
+                return None  # pragma: no cover
+            if fd is not None:  # pragma: no cover
+                fd.close()  # pragma: no cover
             tp = desc[2]
-            if tp == imp.PY_COMPILED:
-                if hasattr(imp, "source_from_cache"):
-                    try:
-                        fn = imp.source_from_cache(fn)
-                    except ValueError:
+            if tp == imp.PY_COMPILED:  # pragma: no cover
+                if hasattr(imp, "source_from_cache"):  # pragma: no cover
+                    try:  # pragma: no cover
+                        fn = imp.source_from_cache(fn)  # pragma: no cover
+                    except ValueError:  # pragma: no cover
                         # Python 3 doesn't like orphaned but still-importable
                         # .pyc files.
-                        fn = fn[:-1]
+                        fn = fn[:-1]  # pragma: no cover
                 else:
-                    fn = fn[:-1]
-            elif tp != imp.PY_SOURCE:
+                    fn = fn[:-1]  # pragma: no cover
+            elif tp != imp.PY_SOURCE:  # pragma: no cover
                 # Don't know what this is.
                 return None
         else:
@@ -72,10 +75,10 @@ class RewriteHook(object):
             mod.__file__ = co.co_filename
             mod.__loader__ = self
             exec(co, mod.__dict__)
-        except:  # noqa
-            if name in sys.modules:
-                del sys.modules[name]
-            raise
+        except:  # noqa  # pragma: no cover
+            if name in sys.modules:  # pragma: no cover
+                del sys.modules[name]  # pragma: no cover
+            raise  # pragma: no cover
         return sys.modules[name]
 
 

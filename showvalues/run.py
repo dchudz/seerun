@@ -4,8 +4,11 @@ A lot of the was taken from coverage.py:
 https://bitbucket.org/ned/coveragepy/src
 /a31983fd62940d4f039de21dc3ce84c8c659b831/coverage/execfile.py
 
-Probably we're missing some stuff I should have taken, and have some stuff
+Probably we're missing some stuff I should have taken, and has some stuff
 that wasn't necessary to take.
+
+Lots of "# pragma: no cover" b/c I don't have tetss using all of this, but
+I suspect some of it is better to keep than not to.
 """
 import logging
 import sys
@@ -28,24 +31,24 @@ def find_module(modulename):
     """
     try:
         spec = importlib.util.find_spec(modulename)
-    except ImportError as err:
-        raise Exception(str(err))
-    if not spec:
-        raise Exception("No module named %r" % (modulename,))
+    except ImportError as err:  # pragma: no cover
+        raise Exception(str(err))  # pragma: no cover
+    if not spec:  # pragma: no cover
+        raise Exception("No module named %r" % (modulename,))  # pragma: no cover
     pathname = spec.origin
     packagename = spec.name
-    if pathname.endswith("__init__.py") and not modulename.endswith(
+    if pathname.endswith("__init__.py") and not modulename.endswith(  # pragma: no cover
             "__init__"):
-        mod_main = modulename + ".__main__"
-        spec = importlib.util.find_spec(mod_main)
-        if not spec:
-            raise NoSource(
+        mod_main = modulename + ".__main__"  # pragma: no cover
+        spec = importlib.util.find_spec(mod_main)  # pragma: no cover
+        if not spec:  # pragma: no cover
+            raise Exception(  # pragma: no cover
                 "No module named %s; "
                 "%r is a package and cannot be directly executed"
                 % (mod_main, modulename)
             )
-        pathname = spec.origin
-        packagename = spec.name
+        pathname = spec.origin  # pragma: no cover
+        packagename = spec.name  # pragma: no cover
     packagename = packagename.rpartition(".")[0]
     return pathname, packagename
 
@@ -110,8 +113,8 @@ def run(script_source_or_compiled, args, environment, path=None,
             # Don't make noise about SystemExit(0) - that's normal.
             logging.exception('got exception executing tranformed tree')
     except (Exception, SystemExit):
-        if raise_exceptions:
-            raise
+        if raise_exceptions:  # pragma: no cover
+            raise  # pragma: no cover
         else:
             logging.exception('`got exception executing tranformed tree')
     finally:

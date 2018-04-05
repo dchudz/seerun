@@ -50,11 +50,11 @@ def trackmodule(trackpath, htmlout, runscript, runmodule, args):
     #TODO: relative to absolute paths
     #TODO: nice error when len(args) == 0
     trackpath = os.path.abspath(trackpath)
-    if runscript + runmodule != 1:
-        raise click.ClickException(
+    # TODO: add test for providing both args erroneously & remove these "no cover"s
+    if runscript + runmodule != 1:  # pragma: no cover
+        raise click.ClickException(  # pragma: no cover
             'Provide exactly one of  --runscript and --runmodule.')
     if runmodule:
-        # TODO: this needs a test! not sure the best way to test it cleanly.
         module_to_run = args[0]
         values = get_values_from_module_execution(trackpath, module_to_run, args)
     if runscript:
@@ -62,6 +62,3 @@ def trackmodule(trackpath, htmlout, runscript, runmodule, args):
         values = moduletracker.get_values_from_script_execution(
             trackpath, script_to_run, args)
     write_html(script_path=trackpath, html_path=htmlout, values=values)
-
-if __name__ == '__main__':
-    main()

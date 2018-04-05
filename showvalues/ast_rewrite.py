@@ -26,19 +26,19 @@ class SaveTransformer(NodeTransformer):
             elif isinstance(old_value, list):
                 new_values = []
                 for value in old_value:
-                    if isinstance(value, AST):
+                    if isinstance(value, AST):  # pragma: no cover
                         value = self.visit(value)
-                        if value is None:
-                            continue
-                        elif not isinstance(value, AST):
-                            new_values.extend(value)
-                            continue
+                        if value is None:  # pragma: no cover
+                            continue  # pragma: no cover
+                        elif not isinstance(value, AST):  # pragma: no cover
+                            new_values.extend(value)  # pragma: no cover
+                            continue  # pragma: no cover
                     new_values.append(value)
                 old_value[:] = new_values
             elif isinstance(old_value, AST):
                 new_node = self.visit(old_value)
-                if new_node is None:
-                    delattr(node, field)
+                if new_node is None:  # pragma: no cover
+                    delattr(node, field)  # pragma: no cover
                 else:
                     setattr(node, field, new_node)
         return node

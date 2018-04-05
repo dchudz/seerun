@@ -29,15 +29,14 @@ class RangeFinder(NodeVisitor):
 
     def visit_call(self, node):
         for field, value in ast.iter_fields(node):
-            # import ipdb; ipdb.set_trace()
             if field == 'func' and isinstance(value, ast.Name):  # don't really need isinstance?
                 pass  # too boring for a node to be just a function name
-            elif isinstance(value, list):
+            elif isinstance(value, list):  # pragma: no cover
                 for item in value:
-                    if isinstance(item, ast.AST):
+                    if isinstance(item, ast.AST):  # pragma: no cover
                         self.visit(item)
-            elif isinstance(value, ast.AST):
-                self.visit(value)
+            elif isinstance(value, ast.AST):  # pragma: no cover
+                self.visit(value)  # pragma: no cover
 
     def visit(self, node):
         if hasattr(node, 'first_token'):  # Some don't have token ranges.
