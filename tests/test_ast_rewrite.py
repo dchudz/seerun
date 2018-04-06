@@ -26,7 +26,6 @@ def test_dont_rewrite_left_of_equals():
 
 def test_dont_rewrite_assignee_of_for():
     tree = asttokens.ASTTokens('for i in [1,2]: print(i)', parse=True).tree
-    print(ast.dump(tree))
     old_target = get_target(tree)
     SaveTransformer().visit(tree)
     assert old_target == get_target(tree)
