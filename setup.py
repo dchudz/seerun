@@ -15,13 +15,12 @@ setup(
                 " (deleted, replaced) with tests still passing (be careful!)",
     entry_points={
         'console_scripts': [
-            'viewrun=showvalues.cli:main',
+            'seerun=seerun.cli:main',
         ],
     },
     install_requires=['Click>=6.0', 'asttokens>=1.1'],
     include_package_data=True,
-    keywords='showvalues',
-    name='showvalues',
-    packages=find_packages(include=['showvalues']),
+    name='seerun',
+    packages=find_packages(include=['seerun']),
     version='0.1.0',
 )

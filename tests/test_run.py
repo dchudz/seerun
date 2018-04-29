@@ -1,4 +1,4 @@
-from showvalues.run import run
+from seerun.run import run
 
 
 def test_run_logs_exceptions(caplog):

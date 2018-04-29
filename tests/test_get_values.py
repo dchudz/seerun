@@ -1,6 +1,6 @@
 import pytest
 
-from showvalues.scripttracker import get_values_from_execution
+from seerun.scripttracker import get_values_from_execution
 
 
 # The important feature of this code is that its repr refers to an attribute of

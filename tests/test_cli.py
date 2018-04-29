@@ -15,7 +15,7 @@ def test_invocation_as_module(temp_html):
     """Test that invoking us with 'python -m ...' works."""
     # TODO: module name will change
     subprocess.call(
-        ['python', '-m', 'showvalues', 'trackscript',
+        ['python', '-m', 'seerun', 'trackscript',
          temp_html.name,
          'tests/scripts/add_received_args.py',
          '33333', '44444'])
@@ -24,7 +24,7 @@ def test_invocation_as_module(temp_html):
 
 def test_command_script_tracker(temp_html):
     subprocess.call(
-        ['viewrun', 'trackscript',
+        ['seerun', 'trackscript',
          temp_html.name,
          'tests/scripts/add_received_args.py',
          '33333', '44444'])
@@ -37,7 +37,7 @@ def test_command_script_tracker(temp_html):
 ])
 def test_module_tracker_script_no_args(script, temp_html):
     subprocess.call(
-        ['viewrun', 'trackmodule',
+        ['seerun', 'trackmodule',
          'tests/add.py',
          temp_html.name,
          '--runscript', script])
@@ -46,7 +46,7 @@ def test_module_tracker_script_no_args(script, temp_html):
 
 def test_module_tracker_script_with_args(temp_html):
     subprocess.call(
-        ['viewrun', 'trackmodule',
+        ['seerun', 'trackmodule',
          'tests/add.py',
          temp_html.name,
          '--runscript',
@@ -57,7 +57,7 @@ def test_module_tracker_script_with_args(temp_html):
 
 def test_module_tracker_module(temp_html):
     subprocess.call(
-        ['viewrun', 'trackmodule',
+        ['seerun', 'trackmodule',
          'tests/add.py',
          temp_html.name,
          '--runmodule',

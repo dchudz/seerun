@@ -2,19 +2,12 @@ import coverage
 import os
 import subprocess
 
-from showvalues.moduletracker import get_values_from_module_execution
-from showvalues import scripttracker
-from showvalues.htmlize import write_html
+from seerun.moduletracker import get_values_from_module_execution
+from seerun import scripttracker
+from seerun.htmlize import write_html
 
 cov = coverage.Coverage()
 cov.start()
-
-# subprocess.call(
-#     ['viewrun', 'trackscript',
-#      '/tmp/hi',
-#      'tests/scripts/add_received_args.py',
-#      '33333', '44444'],
-#     env=dict(os.environ, COVERAGE_PROCESS_START='.coveragerc'))
 
 trackpath = 'tests/add.py'
 
