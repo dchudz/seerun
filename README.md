@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/dchudz/seerun.svg?branch=master)](https://travis-ci.org/dchudz/seerun)
+
 I like reading code, but even very nice code can be hard to follow without seeing what it does.
 
 You can always enter a debugger to look at values during an execution, but that's annoying.
