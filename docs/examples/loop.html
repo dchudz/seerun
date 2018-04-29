@@ -1,0 +1,94 @@
+
+<html>
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1
+/jquery.min.js"></script>
+<style>
+* {
+    box-sizing: border-box;
+}
+
+#content,
+html,
+body {
+  height: 98%;
+}
+
+#left {
+  float: left;
+  width: 50%;
+  height: 100%;
+  overflow: scroll;
+}
+
+#right {
+  float: left;
+  width: 50%;
+  height: 100%;
+  overflow: scroll;
+}
+
+.highlight-mouseover {
+  background: cyan;
+}
+.highlight-click {
+  background: yellow;
+}
+
+
+</style>
+</head>
+<body>
+
+<div class="row">
+  <div id="left">
+<pre><span class="node" id="¯\_(ツ)_/¯"><span class="node" id="¯\_(ツ)_/¯"><span class="node" id="¯\_(ツ)_/¯"><span title="hi" class="text">silly_list</span></span><span title="hi" class="text"> = </span><span class="node" id="<pre>[]</pre>"><span title="hi" class="text">[]</span></span></span><span title="hi" class="text">
+
+</span><span class="node" id="¯\_(ツ)_/¯"><span title="hi" class="text">for </span><span class="node" id="¯\_(ツ)_/¯"><span title="hi" class="text">i</span></span><span title="hi" class="text"> in </span><span class="node" id="<pre>range(0, 5)</pre>"><span title="hi" class="text">range(</span><span class="node" id="<pre>5</pre>"><span title="hi" class="text">5</span></span><span title="hi" class="text">)</span></span><span title="hi" class="text">:
+    </span><span class="node" id="<pre>None</pre><hr><pre>None</pre><hr><pre>None</pre><hr><pre>None</pre><hr><pre>None</pre>"><span class="node" id="<pre>None</pre><hr><pre>None</pre><hr><pre>None</pre><hr><pre>None</pre><hr><pre>None</pre>"><span class="node" id="<pre>&amp;lt;built-in method append of list object at 0x102e96a08&amp;gt;</pre><hr><pre>&amp;lt;built-in method append of list object at 0x102e96a08&amp;gt;</pre><hr><pre>&amp;lt;built-in method append of list object at 0x102e96a08&amp;gt;</pre><hr><pre>&amp;lt;built-in method append of list object at 0x102e96a08&amp;gt;</pre><hr><pre>&amp;lt;built-in method append of list object at 0x102e96a08&amp;gt;</pre>"><span class="node" id="<pre>[]</pre><hr><pre>[True]</pre><hr><pre>[True, False]</pre><hr><pre>[True, False, True]</pre><hr><pre>[True, False, True, False]</pre>"><span title="hi" class="text">silly_list</span></span><span title="hi" class="text">.append</span></span><span title="hi" class="text">(</span><span class="node" id="<pre>True</pre><hr><pre>False</pre><hr><pre>True</pre><hr><pre>False</pre><hr><pre>True</pre>"><span class="node" id="<pre>0</pre><hr><pre>1</pre><hr><pre>0</pre><hr><pre>1</pre><hr><pre>0</pre>"><span class="node" id="<pre>0</pre><hr><pre>1</pre><hr><pre>2</pre><hr><pre>3</pre><hr><pre>4</pre>"><span title="hi" class="text">i</span></span><span title="hi" class="text"> % </span><span class="node" id="<pre>2</pre><hr><pre>2</pre><hr><pre>2</pre><hr><pre>2</pre><hr><pre>2</pre>"><span title="hi" class="text">2</span></span></span><span title="hi" class="text"> == </span><span class="node" id="<pre>0</pre><hr><pre>0</pre><hr><pre>0</pre><hr><pre>0</pre><hr><pre>0</pre>"><span title="hi" class="text">0</span></span></span><span title="hi" class="text">)</span></span></span></span><span title="hi" class="text">
+
+</span><span class="node" id="<pre>None</pre>"><span class="node" id="<pre>None</pre>"><span title="hi" class="text">print(</span><span class="node" id="<pre>[True, False, True, False, True]</pre>"><span title="hi" class="text">silly_list</span></span><span title="hi" class="text">)</span></span></span></span><span title="hi" class="text">
+
+
+</pre>
+
+  </div>
+  <div id="right" style="background-color:#bbb;">
+    <h2>Values go here</h2>
+    <p>Put your mouse over an expression. If we've saved any values for it, they'll go here.</p>
+  </div>
+</div>
+
+</body>
+</html>
+
+
+<script>
+    $(document).ready(function() {
+        $('.text').click(function() {
+
+          $('.highlight-click').not(parent).removeClass("highlight-click")
+          parent = $(this).parent();
+          parent.toggleClass( "highlight-click" );
+          $("#right").html(parent[0].id)
+        });
+        $('.text').mouseover(function() {
+          parent = $(this).parent();
+          parent.addClass("highlight-mouseover");
+          if ($('.highlight-click').length === 0) {
+            // if there's a clicked expression, that takes precedence - don't do anything
+            $("#right").html(parent[0].id)
+          }
+        });
+        $('.text').mouseout(function() {
+          $(this).parent().removeClass("highlight-mouseover")
+        });
+    });
+    $(document).on("click", function(e) {
+      if ($(e.target).is(".text") === false) {
+        $('.highlight-click').removeClass("highlight-click")
+      }
+  });
+</script>
+
+</html>
