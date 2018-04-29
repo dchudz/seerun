@@ -94,7 +94,7 @@ def get_html_for_source(code, values):
                 # repr (<class '__main__.MyClass'>) at all.
                 values_str = '<hr>'.join('<pre>' + html.escape(html.escape(v)) + '</pre>'
                                          for v in values_for_loc) \
-                    if values_for_loc else 'dunno'
+                    if values_for_loc else '¯\_(ツ)_/¯'
                 # value_str = html.escape(repr(value)) if value else 'dunno'
                 html_lines.append('<span class="node" id="%s">' % values_str)
             html_lines.append('<span title="hi" class="text">')
@@ -114,31 +114,24 @@ def get_html_for_source(code, values):
     box-sizing: border-box;
 }
 
-html, body {margin: 0; height: 100%%; overflow: hidden}
-
-/* Create two equal columns that floats next to each other */
-.column1 {
-    float: left;
-    width: 60%%;
-    padding: 10px;
-    height: 7000px;
-    overflow: auto;
-    display:block;
-
+#content,
+html,
+body {
+  height: 98%;
 }
 
-.column2 {
-    float: left;
-    width: 40%%;
-    padding: 10px;
-    height: 7000px;
-    overflow: scroll;
+#left {
+  float: left;
+  width: 50%;
+  height: 100%;
+  overflow: scroll;
 }
-/* Clear floats after the columns */
-.row:after {
-    content: "";
-    display: table;
-    clear: both;
+
+#right {
+  float: left;
+  width: 50%;
+  height: 100%;
+  overflow: scroll;
 }
 
 .highlight-mouseover {
@@ -148,24 +141,21 @@ html, body {margin: 0; height: 100%%; overflow: hidden}
   background: yellow;
 }
 
+
 </style>
 </head>
 <body>
 
 <div class="row">
-  <div class="column1">
-<pre>
-
-%s
-
-
+  <div id="left">
+<pre>''' + ''.join(html_lines) + '''
 
 </pre>
 
   </div>
-  <div class="column2" style="background-color:#bbb;">
-    <h2>Column 2</h2>
-    <p>Some text..</p>
+  <div id="right" style="background-color:#bbb;">
+    <h2>Values go here</h2>
+    <p>Put your mouse over an expression. If we've saved any values for it, they'll go here.</p>
   </div>
 </div>
 
@@ -180,14 +170,14 @@ html, body {margin: 0; height: 100%%; overflow: hidden}
           $('.highlight-click').not(parent).removeClass("highlight-click")
           parent = $(this).parent();
           parent.toggleClass( "highlight-click" );
-          $(".column2").html(parent[0].id)
+          $("#right").html(parent[0].id)
         });
         $('.text').mouseover(function() {
           parent = $(this).parent();
           parent.addClass("highlight-mouseover");
           if ($('.highlight-click').length === 0) {
             // if there's a clicked expression, that takes precedence - don't do anything
-            $(".column2").html(parent[0].id)
+            $("#right").html(parent[0].id)
           }
         });
         $('.text').mouseout(function() {
@@ -202,4 +192,4 @@ html, body {margin: 0; height: 100%%; overflow: hidden}
 </script>
 
 </html>
-            ''' % ''.join(html_lines)
+'''
