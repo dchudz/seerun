@@ -65,6 +65,12 @@ def get_ranges(code):
     return visitor.ranges
 
 
+def get_text_class_start_html(pygments_class, has_value):
+    assert pygments_class
+    return '<span class="text {} {}">'.format(
+        pygments_class, "will_show_values" if has_value else '')
+
+
 def get_html_for_source(code, values):
     """Get the html to display code with values.
 
@@ -101,7 +107,7 @@ def get_html_for_source(code, values):
     Whenever we end the current text span, we start a new one -- after whatever has to happen with
     the node spans is done.
     """
-    highlighting_start_classes = highlighting.get_classes_by_start(code)
+    pygments_start_classes = highlighting.get_classes_by_start(code)
     ranges = get_ranges(code)
 
     # needlessly quadratic
@@ -111,13 +117,19 @@ def get_html_for_source(code, values):
 
     html_lines = []
 
-    text_class_begin = None
-    for i, char in enumerate(code):
-        if i in highlighting_start_classes:
-            text_class_begin = '<span class="text {}">'.format(highlighting_start_classes[i])
+    # when we encounter a node, we both True/False onto this stack depending on whether it has a
+    # recorded value. (the top item on the stack corresponds to whether we have a value for the
+    # immediate parent of the current text, and is used for determining whether to make the text
+    # bold)
+    has_values_stack = []
 
+    pygments_class = None
+    for i, char in enumerate(code):
+        print(char)
+        if i in pygments_start_classes:
+            pygments_class = pygments_start_classes[i]
         # need to start a new text span if either: the highlighting class changed OR we need to start a new node
-        if i in ends_by_start or i in highlighting_start_classes:
+        if i in ends_by_start or i in pygments_start_classes:
             ends_for_this_start = sorted(ends_by_start[i], reverse=True) if i in ends_by_start else []
             if i > 0:
                 html_lines.append(
@@ -125,6 +137,7 @@ def get_html_for_source(code, values):
                 # ohhh
             for end in ends_for_this_start:
                 values_for_loc = values.get(id_string_from_start_end(i, end))
+                has_values_stack.append(bool(values_for_loc))
                 # silly double escaping because somewhere our stuff gets unescaped
                 # in the javascript `$(".column2").html(parent[0].id)`
                 #
@@ -135,13 +148,16 @@ def get_html_for_source(code, values):
                     if values_for_loc else '¯\_(ツ)_/¯'
                 # value_str = html.escape(repr(value)) if value else 'dunno'
                 html_lines.append('<span class="node" id="%s">' % values_str)
-            assert text_class_begin
-            html_lines.append(text_class_begin)
+            html_lines.append(get_text_class_start_html(pygments_class, has_values_stack[-1]))
         if ends[i]:
             html_lines.append('</span>')  # end the text span
             html_lines.append('</span>' * ends[i])  # end the nodes
-            assert text_class_begin
-            html_lines.append(text_class_begin)
+            for _ in range(ends[i]):
+                print(has_values_stack)
+                has_values_stack.pop()
+            # has_values_stack can be empty at the very end
+            # (and also at the end we start a text span w/o ending it... silly)
+            html_lines.append(get_text_class_start_html(pygments_class, has_values_stack and has_values_stack[-1]))
 
         html_lines.append(html.escape(char))
 
@@ -180,6 +196,10 @@ body {
 }
 .highlight-click {
   background: yellow;
+}
+
+.will_show_values {
+    font-weight: 900;
 }
 
 
