@@ -5,3 +5,4 @@ ipython
 ipdb
 pytest-cov
 asttokens
+Pygments==2.2

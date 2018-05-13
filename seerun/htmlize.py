@@ -5,11 +5,7 @@ from collections import Counter
 
 import asttokens
 
-# need to not be relative for running "like_pytest.py"... hack?
-# current problem:
-# seerun /Users/davidchudzicki/hypothesis-python/src/hypothesis/internal/conjecture/engine.py  hi.html && open hi.html
-# NameError: name 'attr' is not defined
-from seerun.scripttracker import get_values_from_execution
+from seerun import highlighting
 
 
 class RangeFinder(NodeVisitor):
@@ -70,6 +66,42 @@ def get_ranges(code):
 
 
 def get_html_for_source(code, values):
+    """Get the html to display code with values.
+
+    Args:
+        code: the code
+        values: maps nodes (identified as strings "{start_pos}to{end_pos}" to values
+
+    Returns: a string of HTML
+
+    The structure of our HTML and how we put it together is a bit complicated, so here's an
+    explanation:
+
+    There are two important classes of <span> tags, "node" and "text".
+
+    The innermost tags are "text" tags, and every bit of code is directly surrounded by exactly one
+    of these. When we ask the JavaScript what element is mouseovered or clicked, this is what we
+    get.
+
+    Besides having the "text" class, text tags also have classes that come from the Pygments library
+    for syntax highlighting. We're making a bunch of assumptions about how the HTML from Pygments
+    works: we expect that every bit of code is within exactly one <span> tag, and that getting the
+    class on our span tags right is all we need in order to have correct highlighting.
+
+    We also have one "node" tag for each node in the AST. These begin and end at the locations
+    corresponding to the beginning and end of the code for that node.
+
+    In order to get correct highlighting, there are some rules about when we must end the current
+    text span:
+
+    - whenever the Pygments class changes
+    - whenever we're about to end a node span
+    - whenever we're about to start a node span
+
+    Whenever we end the current text span, we start a new one -- after whatever has to happen with
+    the node spans is done.
+    """
+    highlighting_start_classes = highlighting.get_classes_by_start(code)
     ranges = get_ranges(code)
 
     # needlessly quadratic
@@ -79,12 +111,18 @@ def get_html_for_source(code, values):
 
     html_lines = []
 
-    for i, s in enumerate(code):
-        if i in ends_by_start:
-            ends_for_this_start = sorted(ends_by_start[i], reverse=True)
+    text_class_begin = None
+    for i, char in enumerate(code):
+        if i in highlighting_start_classes:
+            text_class_begin = '<span class="text {}">'.format(highlighting_start_classes[i])
+
+        # need to start a new text span if either: the highlighting class changed OR we need to start a new node
+        if i in ends_by_start or i in highlighting_start_classes:
+            ends_for_this_start = sorted(ends_by_start[i], reverse=True) if i in ends_by_start else []
             if i > 0:
                 html_lines.append(
                     '</span>')  # end the text span from previous ending
+                # ohhh
             for end in ends_for_this_start:
                 values_for_loc = values.get(id_string_from_start_end(i, end))
                 # silly double escaping because somewhere our stuff gets unescaped
@@ -97,19 +135,22 @@ def get_html_for_source(code, values):
                     if values_for_loc else '¯\_(ツ)_/¯'
                 # value_str = html.escape(repr(value)) if value else 'dunno'
                 html_lines.append('<span class="node" id="%s">' % values_str)
-            html_lines.append('<span title="hi" class="text">')
+            assert text_class_begin
+            html_lines.append(text_class_begin)
         if ends[i]:
             html_lines.append('</span>')  # end the text span
             html_lines.append('</span>' * ends[i])  # end the nodes
-            html_lines.append('<span title="hi" class="text">')
-        html_lines.append(html.escape(s))
+            assert text_class_begin
+            html_lines.append(text_class_begin)
+
+        html_lines.append(html.escape(char))
 
     return '''
 <html>
 <head>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1
 /jquery.min.js"></script>
-<style>
+<style>''' + highlighting.get_style_defs() + '''
 * {
     box-sizing: border-box;
 }
@@ -167,13 +208,14 @@ body {
     $(document).ready(function() {
         $('.text').click(function() {
 
+          var parent = $(this).parent();
           $('.highlight-click').not(parent).removeClass("highlight-click")
-          parent = $(this).parent();
           parent.toggleClass( "highlight-click" );
           $("#right").html(parent[0].id)
         });
+        
         $('.text').mouseover(function() {
-          parent = $(this).parent();
+          var parent = $(this).parent();
           parent.addClass("highlight-mouseover");
           if ($('.highlight-click').length === 0) {
             // if there's a clicked expression, that takes precedence - don't do anything

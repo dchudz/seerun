@@ -3,7 +3,74 @@
 <head>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1
 /jquery.min.js"></script>
-<style>
+<style>.hll { background-color: #ffffcc }
+.c { color: #408080; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #408080; font-style: italic } /* Comment.Hashbang */
+.cm { color: #408080; font-style: italic } /* Comment.Multiline */
+.cp { color: #BC7A00 } /* Comment.Preproc */
+.cpf { color: #408080; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #408080; font-style: italic } /* Comment.Single */
+.cs { color: #408080; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.gr { color: #FF0000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #00A000 } /* Generic.Inserted */
+.go { color: #888888 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #7D9029 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #999999; font-weight: bold } /* Name.Entity */
+.ne { color: #D2413A; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #A0A000 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #BB6622; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #BB6688; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #BB6688 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
 * {
     box-sizing: border-box;
 }
@@ -42,13 +109,17 @@ body {
 
 <div class="row">
   <div id="left">
-<pre><span class="node" id="¯\_(ツ)_/¯"><span class="node" id="¯\_(ツ)_/¯"><span class="node" id="¯\_(ツ)_/¯"><span title="hi" class="text">silly_list</span></span><span title="hi" class="text"> = </span><span class="node" id="<pre>[]</pre>"><span title="hi" class="text">[]</span></span></span><span title="hi" class="text">
+<pre><span class="node" id="¯\_(ツ)_/¯"><span class="node" id="¯\_(ツ)_/¯"><span class="node" id="¯\_(ツ)_/¯"><span title="hi" class="text n">silly_list</span></span><span title="hi" class="text n"> </span><span title="hi" class="text o">= </span><span class="node" id="<pre>[]</pre>"><span title="hi" class="text p">[]</span></span></span><span title="hi" class="text p">
 
-</span><span class="node" id="¯\_(ツ)_/¯"><span title="hi" class="text">for </span><span class="node" id="¯\_(ツ)_/¯"><span title="hi" class="text">i</span></span><span title="hi" class="text"> in </span><span class="node" id="<pre>range(0, 5)</pre>"><span title="hi" class="text">range(</span><span class="node" id="<pre>5</pre>"><span title="hi" class="text">5</span></span><span title="hi" class="text">)</span></span><span title="hi" class="text">:
-    </span><span class="node" id="<pre>None</pre><hr><pre>None</pre><hr><pre>None</pre><hr><pre>None</pre><hr><pre>None</pre>"><span class="node" id="<pre>None</pre><hr><pre>None</pre><hr><pre>None</pre><hr><pre>None</pre><hr><pre>None</pre>"><span class="node" id="<pre>&amp;lt;built-in method append of list object at 0x102e96a08&amp;gt;</pre><hr><pre>&amp;lt;built-in method append of list object at 0x102e96a08&amp;gt;</pre><hr><pre>&amp;lt;built-in method append of list object at 0x102e96a08&amp;gt;</pre><hr><pre>&amp;lt;built-in method append of list object at 0x102e96a08&amp;gt;</pre><hr><pre>&amp;lt;built-in method append of list object at 0x102e96a08&amp;gt;</pre>"><span class="node" id="<pre>[]</pre><hr><pre>[True]</pre><hr><pre>[True, False]</pre><hr><pre>[True, False, True]</pre><hr><pre>[True, False, True, False]</pre>"><span title="hi" class="text">silly_list</span></span><span title="hi" class="text">.append</span></span><span title="hi" class="text">(</span><span class="node" id="<pre>True</pre><hr><pre>False</pre><hr><pre>True</pre><hr><pre>False</pre><hr><pre>True</pre>"><span class="node" id="<pre>0</pre><hr><pre>1</pre><hr><pre>0</pre><hr><pre>1</pre><hr><pre>0</pre>"><span class="node" id="<pre>0</pre><hr><pre>1</pre><hr><pre>2</pre><hr><pre>3</pre><hr><pre>4</pre>"><span title="hi" class="text">i</span></span><span title="hi" class="text"> % </span><span class="node" id="<pre>2</pre><hr><pre>2</pre><hr><pre>2</pre><hr><pre>2</pre><hr><pre>2</pre>"><span title="hi" class="text">2</span></span></span><span title="hi" class="text"> == </span><span class="node" id="<pre>0</pre><hr><pre>0</pre><hr><pre>0</pre><hr><pre>0</pre><hr><pre>0</pre>"><span title="hi" class="text">0</span></span></span><span title="hi" class="text">)</span></span></span></span><span title="hi" class="text">
+</span><span class="node" id="¯\_(ツ)_/¯"><span title="hi" class="text k">for </span><span class="node" id="¯\_(ツ)_/¯"><span title="hi" class="text n">i</span></span><span title="hi" class="text n"> </span><span title="hi" class="text ow">in </span><span class="node" id="<pre>range(0, 5)</pre>"><span title="hi" class="text nb">range</span><span title="hi" class="text p">(</span><span class="node" id="<pre>5</pre>"><span title="hi" class="text mi">5</span><span title="hi" class="text p"></span></span><span title="hi" class="text p">)</span></span><span title="hi" class="text p">:
+    </span><span class="node" id="<pre>None</pre><hr><pre>None</pre><hr><pre>None</pre><hr><pre>None</pre><hr><pre>None</pre>"><span class="node" id="<pre>None</pre><hr><pre>None</pre><hr><pre>None</pre><hr><pre>None</pre><hr><pre>None</pre>"><span class="node" id="<pre>&amp;lt;built-in method append of list object at 0x103f01708&amp;gt;</pre><hr><pre>&amp;lt;built-in method append of list object at 0x103f01708&amp;gt;</pre><hr><pre>&amp;lt;built-in method append of list object at 0x103f01708&amp;gt;</pre><hr><pre>&amp;lt;built-in method append of list object at 0x103f01708&amp;gt;</pre><hr><pre>&amp;lt;built-in method append of list object at 0x103f01708&amp;gt;</pre>"><span class="node" id="<pre>[]</pre><hr><pre>[True]</pre><hr><pre>[True, False]</pre><hr><pre>[True, False, True]</pre><hr><pre>[True, False, True, False]</pre>"><span title="hi" class="text n">silly_list</span><span title="hi" class="text o"></span></span><span title="hi" class="text o">.</span><span title="hi" class="text n">append</span><span title="hi" class="text p"></span></span><span title="hi" class="text p">(</span><span class="node" id="<pre>True</pre><hr><pre>False</pre><hr><pre>True</pre><hr><pre>False</pre><hr><pre>True</pre>"><span class="node" id="<pre>0</pre><hr><pre>1</pre><hr><pre>0</pre><hr><pre>1</pre><hr><pre>0</pre>"><span class="node" id="<pre>0</pre><hr><pre>1</pre><hr><pre>2</pre><hr><pre>3</pre><hr><pre>4</pre>"><span title="hi" class="text n">i</span></span><span title="hi" class="text n"> </span><span title="hi" class="text o">% </span><span class="node" id="<pre>2</pre><hr><pre>2</pre><hr><pre>2</pre><hr><pre>2</pre><hr><pre>2</pre>"><span title="hi" class="text mi">2</span></span></span><span title="hi" class="text mi"> </span><span title="hi" class="text o">== </span><span class="node" id="<pre>0</pre><hr><pre>0</pre><hr><pre>0</pre><hr><pre>0</pre><hr><pre>0</pre>"><span title="hi" class="text mi">0</span><span title="hi" class="text p"></span></span></span><span title="hi" class="text p">)</span></span></span></span><span title="hi" class="text p">
 
-</span><span class="node" id="<pre>None</pre>"><span class="node" id="<pre>None</pre>"><span title="hi" class="text">print(</span><span class="node" id="<pre>[True, False, True, False, True]</pre>"><span title="hi" class="text">silly_list</span></span><span title="hi" class="text">)</span></span></span></span><span title="hi" class="text">
+</span><span class="node" id="<pre>None</pre>"><span class="node" id="<pre>None</pre>"><span title="hi" class="text nb">print</span><span title="hi" class="text p">(</span><span class="node" id="<pre>[True, False, True, False, True]</pre>"><span title="hi" class="text n">silly_list</span><span title="hi" class="text p"></span></span><span title="hi" class="text p">)</span></span></span><span title="hi" class="text p">
 
+</span><span class="node" id="¯\_(ツ)_/¯"><span class="node" id="¯\_(ツ)_/¯"><span title="hi" class="text n">ddd</span></span><span title="hi" class="text n"> </span><span title="hi" class="text o">= </span><span class="node" id="<pre>{111: {222: 333}}</pre>"><span title="hi" class="text p">{</span><span class="node" id="<pre>111</pre>"><span class="node" id="<pre>110</pre>"><span title="hi" class="text mi">110</span><span title="hi" class="text o"></span></span><span title="hi" class="text o">+</span><span class="node" id="<pre>1</pre>"><span title="hi" class="text mi">1</span><span title="hi" class="text p"></span></span></span><span title="hi" class="text p">: </span><span class="node" id="<pre>{222: 333}</pre>"><span title="hi" class="text p">{</span><span class="node" id="<pre>222</pre>"><span class="node" id="<pre>220</pre>"><span title="hi" class="text mi">220</span><span title="hi" class="text o"></span></span><span title="hi" class="text o">+</span><span class="node" id="<pre>2</pre>"><span title="hi" class="text mi">2</span><span title="hi" class="text p"></span></span></span><span title="hi" class="text p">: </span><span class="node" id="<pre>333</pre>"><span class="node" id="<pre>330</pre>"><span title="hi" class="text mi">330</span><span title="hi" class="text o"></span></span><span title="hi" class="text o">+</span><span class="node" id="<pre>3</pre>"><span title="hi" class="text mi">3</span><span title="hi" class="text p"></span></span></span><span title="hi" class="text p">}</span></span><span title="hi" class="text p">}</span></span></span><span title="hi" class="text p">
+</span><span class="node" id="<pre>333</pre>"><span class="node" id="<pre>333</pre>"><span class="node" id="<pre>{222: 333}</pre>"><span class="node" id="<pre>{111: {222: 333}}</pre>"><span title="hi" class="text n">ddd</span><span title="hi" class="text p"></span></span><span title="hi" class="text p">[</span><span class="node" id="<pre>111</pre>"><span class="node" id="<pre>111</pre>"><span title="hi" class="text mi">111</span><span title="hi" class="text p"></span></span></span><span title="hi" class="text p">]</span></span><span title="hi" class="text p">[</span><span class="node" id="<pre>222</pre>"><span class="node" id="<pre>222</pre>"><span title="hi" class="text mi">222</span><span title="hi" class="text p"></span></span></span><span title="hi" class="text p">]</span></span></span><span title="hi" class="text p">
+
+</span><span class="node" id="<pre>&amp;#x27;hihi!&amp;#x27;</pre>"><span class="node" id="<pre>&amp;#x27;hihi!&amp;#x27;</pre>"><span title="hi" class="text s2">&quot;hihi!&quot;
 
 </pre>
 
@@ -67,13 +138,14 @@ body {
     $(document).ready(function() {
         $('.text').click(function() {
 
+          var parent = $(this).parent();
           $('.highlight-click').not(parent).removeClass("highlight-click")
-          parent = $(this).parent();
           parent.toggleClass( "highlight-click" );
           $("#right").html(parent[0].id)
         });
+        
         $('.text').mouseover(function() {
-          parent = $(this).parent();
+          var parent = $(this).parent();
           parent.addClass("highlight-mouseover");
           if ($('.highlight-click').length === 0) {
             // if there's a clicked expression, that takes precedence - don't do anything
