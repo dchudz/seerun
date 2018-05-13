@@ -66,7 +66,8 @@ def get_ranges(code):
 
 
 def get_text_class_start_html(pygments_class, has_value):
-    assert pygments_class
+    if not pygments_class:
+        pygments_class = ''
     return '<span class="text {} {}">'.format(
         pygments_class, "will_show_values" if has_value else '')
 
@@ -125,7 +126,6 @@ def get_html_for_source(code, values):
 
     pygments_class = None
     for i, char in enumerate(code):
-        print(char)
         if i in pygments_start_classes:
             pygments_class = pygments_start_classes[i]
         # need to start a new text span if either: the highlighting class changed OR we need to start a new node
@@ -153,7 +153,6 @@ def get_html_for_source(code, values):
             html_lines.append('</span>')  # end the text span
             html_lines.append('</span>' * ends[i])  # end the nodes
             for _ in range(ends[i]):
-                print(has_values_stack)
                 has_values_stack.pop()
             # has_values_stack can be empty at the very end
             # (and also at the end we start a text span w/o ending it... silly)
