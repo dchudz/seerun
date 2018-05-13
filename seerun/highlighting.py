@@ -13,27 +13,41 @@ class MyHTMLParser(HTMLParser):
         super().__init__(*args, **kwargs)
 
         # positions (in original text) & what to insert before
-        self.start_insertions = defaultdict(str)
-        self.end_insertions = defaultdict(str)
-
+        self.start_classes = {}
         self.current_position = 0
 
     def handle_starttag(self, tag, attrs):
-        if tag=='div' or not attrs:  # kinda hacky to avoid extra stuff, results in hanging extra </span> that doesn't seem to cause problems
+        print(f'start {self.current_position}:' + tag)
+        if tag == 'div':
+            assert attrs == [('class', 'highlight')]
             return
-        attr_strings = [f'{class_name}="{value}" ' for class_name, value in attrs]
-        self.start_insertions[self.current_position] += f'<{tag} {"".join(attr_strings)}>'
+        if tag == 'pre':
+            assert not attrs, "{} {}".format(tag, attrs)
+            return
+        assert tag == 'span', "{} {}".format(tag, attrs)
+        if not attrs:
+            return
+
+        # we assume there's only one attr and it's a class -- revisit if that fails
+        print(attrs)
+        assert len(attrs) == 1
+        attr_name, value = attrs[0]
+        assert attr_name == 'class'
+
+        # assume we only get one start tag at any given position
+        assert self.current_position not in self.start_classes
+
+        self.start_classes[self.current_position] = value
 
     def handle_endtag(self, tag):
-        if tag=='div':
-            return
-        self.end_insertions[self.current_position] += f'</{tag}>'
+        print(f'end {self.current_position}:' + tag)
 
     def handle_data(self, data):
+        print('data: ' + data)
         self.current_position += len(data)
 
 
-def get_insertions(code):
+def get_classes_by_start(code):
     """Returns a dictionary mapping positions in the code to html equivalent to what Pygments would
     insert prior to that position."""
     lexer = Python3Lexer()
@@ -45,10 +59,12 @@ def get_insertions(code):
     formatter.format(tokens, pygments_html)
     pygments_html.seek(0)
     html = pygments_html.read()
+    print("\n\n")
+    print(html)
 
     parser.feed(html)
 
-    return parser.start_insertions, parser.end_insertions
+    return parser.start_classes
 
 
 def get_style_defs():
