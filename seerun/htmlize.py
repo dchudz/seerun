@@ -102,10 +102,6 @@ def get_html_for_source(code, values):
     the node spans is done.
     """
     highlighting_start_classes = highlighting.get_classes_by_start(code)
-    print("\n\n")
-    print(highlighting_start_classes)
-    print("\n\n")
-
     ranges = get_ranges(code)
 
     # needlessly quadratic
@@ -118,7 +114,7 @@ def get_html_for_source(code, values):
     text_class_begin = None
     for i, char in enumerate(code):
         if i in highlighting_start_classes:
-            text_class_begin = f'<span title="hi" class="text {highlighting_start_classes[i]}">'
+            text_class_begin = '<span class="text {}">'.format(highlighting_start_classes[i])
 
         # need to start a new text span if either: the highlighting class changed OR we need to start a new node
         if i in ends_by_start or i in highlighting_start_classes:

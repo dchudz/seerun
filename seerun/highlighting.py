@@ -17,7 +17,6 @@ class MyHTMLParser(HTMLParser):
         self.current_position = 0
 
     def handle_starttag(self, tag, attrs):
-        print(f'start {self.current_position}:' + tag)
         if tag == 'div':
             assert attrs == [('class', 'highlight')]
             return
@@ -29,7 +28,6 @@ class MyHTMLParser(HTMLParser):
             return
 
         # we assume there's only one attr and it's a class -- revisit if that fails
-        print(attrs)
         assert len(attrs) == 1
         attr_name, value = attrs[0]
         assert attr_name == 'class'
@@ -40,10 +38,9 @@ class MyHTMLParser(HTMLParser):
         self.start_classes[self.current_position] = value
 
     def handle_endtag(self, tag):
-        print(f'end {self.current_position}:' + tag)
+        pass
 
     def handle_data(self, data):
-        print('data: ' + data)
         self.current_position += len(data)
 
 
