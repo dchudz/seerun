@@ -56,11 +56,7 @@ def get_classes_by_start(code):
     formatter.format(tokens, pygments_html)
     pygments_html.seek(0)
     html = pygments_html.read()
-    print("\n\n")
-    print(html)
-
     parser.feed(html)
-
     return parser.start_classes
 
 

@@ -144,12 +144,6 @@ def get_html_for_source(code, values):
             html_lines.append(text_class_begin)
 
         html_lines.append(html.escape(char))
-        # todonext:
-        # fix extra space getting highlighted on next line after range(5):
-        # 1st "silly_list" doesn't get highlighted
-        # highlighting 1st "=" highlights entire code
-        # nothing gets values
-        # clicking totally broken
 
     return '''
 <html>
