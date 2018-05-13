@@ -53,26 +53,3 @@ def get_insertions(code):
 
 def get_style_defs():
     return HtmlFormatter().get_style_defs()
-
-
-# just an example you can manually run to make sure things are working
-# it'd be nice if we could have a better automated test, but the html produced doesn't exactly
-# match the html pygments gives us (even though they should be functionally the same)
-if __name__ == '__main__':
-    html_out_strs = []
-
-    with open('examples/loop.py') as python_file:
-        code = python_file.read()
-
-    highlighting_start_insertions, highlighting_end_insertions = get_insertions(code)
-
-    for i, char in enumerate(code):
-        html_out_strs.append(highlighting_start_insertions[i])
-        html_out_strs.append(html.escape(char))
-        html_out_strs.append(highlighting_end_insertions[i+1])
-
-
-    with open('hi.html', 'w') as hi_file:
-        hi_file.write(f'<html><head><style>{get_style_defs()}</style></head>')
-        hi_file.write(''.join(html_out_strs))
-        hi_file.write('</html>')
