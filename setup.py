@@ -18,7 +18,7 @@ setup(
             'seerun=seerun.cli:main',
         ],
     },
-    install_requires=['Click>=6.0', 'asttokens>=1.1'],
+    install_requires=['Click>=6.0', 'asttokens>=1.1', 'Pygments>=2.2'],
     include_package_data=True,
     name='seerun',
     packages=find_packages(include=['seerun']),

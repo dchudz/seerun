@@ -5,11 +5,7 @@ from collections import Counter
 
 import asttokens
 
-# need to not be relative for running "like_pytest.py"... hack?
-# current problem:
-# seerun /Users/davidchudzicki/hypothesis-python/src/hypothesis/internal/conjecture/engine.py  hi.html && open hi.html
-# NameError: name 'attr' is not defined
-from seerun.scripttracker import get_values_from_execution
+from seerun import highlighting
 
 
 class RangeFinder(NodeVisitor):
@@ -70,6 +66,8 @@ def get_ranges(code):
 
 
 def get_html_for_source(code, values):
+    highlighting_start_insertions, highlighting_end_insertions = highlighting.get_insertions(code)
+
     ranges = get_ranges(code)
 
     # needlessly quadratic
@@ -79,12 +77,13 @@ def get_html_for_source(code, values):
 
     html_lines = []
 
-    for i, s in enumerate(code):
+    for i, char in enumerate(code):
         if i in ends_by_start:
             ends_for_this_start = sorted(ends_by_start[i], reverse=True)
             if i > 0:
                 html_lines.append(
                     '</span>')  # end the text span from previous ending
+                # ohhh
             for end in ends_for_this_start:
                 values_for_loc = values.get(id_string_from_start_end(i, end))
                 # silly double escaping because somewhere our stuff gets unescaped
@@ -102,14 +101,23 @@ def get_html_for_source(code, values):
             html_lines.append('</span>')  # end the text span
             html_lines.append('</span>' * ends[i])  # end the nodes
             html_lines.append('<span title="hi" class="text">')
-        html_lines.append(html.escape(s))
+
+        html_lines.append(highlighting_start_insertions[i])
+        html_lines.append(html.escape(char))
+        html_lines.append(highlighting_end_insertions[i+1])
+        # todonext:
+        # fix extra space getting highlighted on next line after range(5):
+        # 1st "silly_list" doesn't get highlighted
+        # highlighting 1st "=" highlights entire code
+        # nothing gets values
+        # clicking totally broken
 
     return '''
 <html>
 <head>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1
 /jquery.min.js"></script>
-<style>
+<style>''' + highlighting.get_style_defs() + '''
 * {
     box-sizing: border-box;
 }
@@ -167,13 +175,14 @@ body {
     $(document).ready(function() {
         $('.text').click(function() {
 
+          var parent = $(this).parent();
           $('.highlight-click').not(parent).removeClass("highlight-click")
-          parent = $(this).parent();
           parent.toggleClass( "highlight-click" );
           $("#right").html(parent[0].id)
         });
+        
         $('.text').mouseover(function() {
-          parent = $(this).parent();
+          var parent = $(this).parent();
           parent.addClass("highlight-mouseover");
           if ($('.highlight-click').length === 0) {
             // if there's a clicked expression, that takes precedence - don't do anything
