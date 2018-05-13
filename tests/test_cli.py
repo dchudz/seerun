@@ -31,6 +31,15 @@ def test_command_script_tracker(temp_html):
     assert b'77777' in temp_html.read()
 
 
+def test_starts_with_newlines(temp_html):
+    subprocess.call(
+        ['seerun', 'trackscript',
+         temp_html.name,
+         'tests/scripts/starts_with_newline.py'])
+    assert b'77777' in temp_html.read()
+
+
+
 @pytest.mark.parametrize('script', [
     'tests/scripts/no_args_call_add.py',
     'tests/scripts/call_add_in_main.py',
